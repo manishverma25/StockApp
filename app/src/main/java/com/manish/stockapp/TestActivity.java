@@ -14,7 +14,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,13 +45,38 @@ public class TestActivity extends AppCompatActivity {
     }
 
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        noteRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                if (e != null) {
+                    Toast.makeText(TestActivity.this, "Error while loading!", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, e.toString());
+                    return;
+                }
+
+                if (documentSnapshot.exists()) {
+                    Note note = documentSnapshot.toObject(Note.class);
+
+                    String title = note.getTitle();
+                    String description = note.getDescription();
+
+                    textViewData.setText("Title: " + title + "\n" + "Description: " + description);
+                } else {
+                    textViewData.setText("");
+                }
+            }
+        });
+    }
+
     public void saveNote(View v) {
         String title = editTextTitle.getText().toString();
         String description = editTextDescription.getText().toString();
 
-        Map<String, Object> note = new HashMap<>();
-        note.put(KEY_TITLE, title);
-        note.put(KEY_DESCRIPTION, description);
+        Note note = new Note(title, description);
 
         noteRef.set(note)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -66,16 +94,38 @@ public class TestActivity extends AppCompatActivity {
                 });
     }
 
+    public void updateDescription(View v) {
+        String description = editTextDescription.getText().toString();
+
+        //Map<String, Object> note = new HashMap<>();
+        //note.put(KEY_DESCRIPTION, description);
+
+        //noteRef.set(note, SetOptions.merge());
+        noteRef.update(KEY_DESCRIPTION, description);
+    }
+
+    public void deleteDescription(View v) {
+        //Map<String, Object> note = new HashMap<>();
+        //note.put(KEY_DESCRIPTION, FieldValue.delete());
+
+        //noteRef.update(note);
+        noteRef.update(KEY_DESCRIPTION, FieldValue.delete());
+    }
+
+    public void deleteNote(View v) {
+        noteRef.delete();
+    }
+
     public void loadNote(View v) {
         noteRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
-                            String title = documentSnapshot.getString(KEY_TITLE);
-                            String description = documentSnapshot.getString(KEY_DESCRIPTION);
+                            Note note = documentSnapshot.toObject(Note.class);
 
-                            //Map<String, Object> note = documentSnapshot.getData();
+                            String title = note.getTitle();
+                            String description = note.getDescription();
 
                             textViewData.setText("Title: " + title + "\n" + "Description: " + description);
                         } else {
