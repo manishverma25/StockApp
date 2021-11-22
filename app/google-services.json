@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "808700466364",
+    "project_id": "stockapp-ab8ac",
+    "storage_bucket": "stockapp-ab8ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808700466364:android:ab9733b0e25cf36d2f6cb9",
+        "android_client_info": {
+          "package_name": "com.manish.stockapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "808700466364-e77u0qlbv5mtecsr8uh77bg6dcl3hohu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIu1iE5GUGofgjfD99a4q3mOamN2tkkuM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "808700466364-e77u0qlbv5mtecsr8uh77bg6dcl3hohu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
