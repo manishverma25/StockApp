@@ -7,12 +7,37 @@
     android:orientation="vertical"
     tools:context=".TestActivity">
 
+
+    <EditText
+        android:id="@+id/titleEdt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="title">
+
+    </EditText>
+
+
+    <EditText
+        android:id="@+id/descEdt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Description">
+
+    </EditText>
+
     <Button
-        android:layout_gravity="center_vertical"
-        android:text="click"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:onClick="saveNote"
+        android:text="click">
 
     </Button>
+
+    <TextView
+        android:id="@+id/text_view_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp" />
 
 </LinearLayout>
