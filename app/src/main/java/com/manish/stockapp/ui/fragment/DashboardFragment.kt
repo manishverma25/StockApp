@@ -9,8 +9,10 @@ import android.view.ViewGroup
 import com.manish.stockapp.R
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.manish.stockapp.app.StockApplication
 import com.manish.stockapp.repository.StockDetailsRepository
+import com.manish.stockapp.ui.adapter.StockDetailsAdapter
 import com.manish.stockapp.util.Resource
 import com.manish.stockapp.viewmodel.DashboardViewModel
 import com.manish.stockapp.viewmodel.ViewModelProviderFactory
@@ -19,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_home_layout.*
 
 class DashboardFragment : Fragment() {
     private lateinit var viewModel: DashboardViewModel
+    lateinit var stockDetailsAdapter: StockDetailsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,18 +33,25 @@ class DashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        init()
+    }
+
+
+    private fun init() {
+        rvPics.setHasFixedSize(true)
+        rvPics.layoutManager = LinearLayoutManager(activity)
+        stockDetailsAdapter = StockDetailsAdapter()
         setupViewModel()
     }
 
 
     private fun setupViewModel() {
         val repository = StockDetailsRepository()
-        val factory = ViewModelProviderFactory(activity?.applicationContext as StockApplication, repository)
+        val factory =
+            ViewModelProviderFactory(activity?.applicationContext as StockApplication, repository)
         viewModel = ViewModelProvider(this, factory).get(DashboardViewModel::class.java)
         getStocksDetails()
     }
-
-
 
 
     private fun getStocksDetails() {
@@ -51,9 +61,9 @@ class DashboardFragment : Fragment() {
                 is Resource.Success -> {
                     hideProgressBar()
                     response.data?.let { stockDetailsResponse ->
-                        Log.d(TAG, " stockDetailsResponsessage :  ${stockDetailsResponse.sid}")
-//                        picsAdapter.differ.submitList(picsResponse)
-//                        rvPics.adapter = picsAdapter
+                        Log.d(TAG, " stockDetailsResponsessage :  ${stockDetailsResponse}")
+                        stockDetailsAdapter.differ.submitList(stockDetailsResponse)
+                        rvPics.adapter = stockDetailsAdapter
                     }
                 }
 
@@ -82,7 +92,7 @@ class DashboardFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance( param1: String?, param2: String?): DashboardFragment {
+        fun newInstance(param1: String?, param2: String?): DashboardFragment {
             val fragment = DashboardFragment()
             val args = Bundle()
             args.putString(ARG_PARAM1, param1)
@@ -93,8 +103,10 @@ class DashboardFragment : Fragment() {
 
         private val ARG_PARAM1 = "param1"
         private val ARG_PARAM2 = "param2"
-        val TAG ="DashboardFragment"
+        val TAG = "DashboardFragment"
     }
+
+
 
 
 }

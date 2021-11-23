@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.hadi.retrofitmvvm.util.Utils.hasInternetConnection
 import com.manish.stockapp.R
 import com.manish.stockapp.app.StockApplication
+import com.manish.stockapp.model.SearchDetailsResponse
 import com.manish.stockapp.model.StockDetailsModel
 import com.manish.stockapp.repository.StockDetailsRepository
 import com.manish.stockapp.util.Resource
@@ -16,7 +17,7 @@ import java.io.IOException
 class DashboardViewModel( app: StockApplication, private val appRepository: StockDetailsRepository) : AndroidViewModel(app)  {
 
 
-    val stockDetailLiveData: MutableLiveData<Resource<StockDetailsModel>> = MutableLiveData()
+    val stockDetailLiveData: MutableLiveData<Resource<SearchDetailsResponse>> = MutableLiveData()
 
     init {
 
@@ -33,7 +34,7 @@ class DashboardViewModel( app: StockApplication, private val appRepository: Stoc
         try {
             if (hasInternetConnection(getApplication<StockApplication>())) {
                 val response = appRepository.getStocksDetails()
-                stockDetailLiveData.postValue(handlePicsResponse(response))
+                stockDetailLiveData.postValue(handleStockDetailsResponse(response))
             } else {
                 stockDetailLiveData.postValue(Resource.Error(getApplication<StockApplication>().getString(
                     R.string.no_internet_connection)))
@@ -58,7 +59,7 @@ class DashboardViewModel( app: StockApplication, private val appRepository: Stoc
         }
     }
 
-    private fun handlePicsResponse(response: Response<StockDetailsModel>): Resource<StockDetailsModel> {
+    private fun handleStockDetailsResponse(response: Response<SearchDetailsResponse>): Resource<SearchDetailsResponse> {
         if (response.isSuccessful) {
             response.body()?.let { resultResponse ->
                 return Resource.Success(resultResponse)
