@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.manish.stockapp.R
 
 
-class HomeFragment : Fragment() {
+class DashboardFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -18,8 +18,8 @@ class HomeFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance( param1: String?, param2: String?): HomeFragment {
-            val fragment = HomeFragment()
+        fun newInstance( param1: String?, param2: String?): DashboardFragment {
+            val fragment = DashboardFragment()
             val args = Bundle()
             args.putString(ARG_PARAM1, param1)
             args.putString(ARG_PARAM2, param2)

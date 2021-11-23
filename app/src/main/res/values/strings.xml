@@ -4,4 +4,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_wishlist">Wishlist</string>
     <string name="menu_profile">Profile</string>
+    <string name="no_internet_connection">No internet available</string>
+    <string name="fetching_stock_details_api_error_msg">Error while getting stocks details</string>
+    <string name="network_failure">Network Failure</string>
 </resources>

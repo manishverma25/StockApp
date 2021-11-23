@@ -5,11 +5,10 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.manish.stockapp.R
-import com.manish.stockapp.ui.fragment.HomeFragment
+import com.manish.stockapp.ui.fragment.DashboardFragment
 import com.manish.stockapp.ui.fragment.SecondFragment
 import com.manish.stockapp.ui.fragment.ThirdFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import me.ibrahimsn.lib.SmoothBottomBar
 
 class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +24,7 @@ class MainActivity : BaseActivity() {
         bottomBar.setOnItemSelectedListener {
             Log.d("mvv", " pos  setOnItemSelectedListener " + it)
             when (it) {
-                0 -> openFragment(HomeFragment. newInstance("", ""))
+                0 -> openFragment(DashboardFragment. newInstance("", ""))
                 1 -> openFragment(SecondFragment. newInstance("", ""))
                 2 -> openFragment(ThirdFragment. newInstance("", ""))
             }
