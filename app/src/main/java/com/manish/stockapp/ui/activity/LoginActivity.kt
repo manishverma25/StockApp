@@ -1,14 +1,14 @@
-package com.manish.stockapp
+package com.manish.stockapp.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.app.ActivityCompat.startActivityForResult
 //import com.firebase.ui.auth.AuthUI;
 
 import android.content.Intent
 import android.util.Log
 import android.view.View
 import com.firebase.ui.auth.AuthUI
+import com.manish.stockapp.R
 
 import java.util.Arrays
 
@@ -39,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
             .setAlwaysShowSignInMethodScreen(true)
             .setIsSmartLockEnabled(false)
             .build()
-        startActivityForResult(intent, Companion.AUTHUI_REQUEST_CODE)
+        startActivityForResult(intent, AUTHUI_REQUEST_CODE)
     }
 
     companion object {

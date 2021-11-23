@@ -1,13 +1,13 @@
-package com.manish.stockapp
+package com.manish.stockapp.ui.activity
 
 import android.content.Intent
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
+import com.manish.stockapp.R
 
 open class BaseActivity:  AppCompatActivity() , FirebaseAuth.AuthStateListener {
     val TAG = "BaseActivity"
@@ -45,7 +45,6 @@ open class BaseActivity:  AppCompatActivity() , FirebaseAuth.AuthStateListener {
             startLoginActivity()
         } else {
             navigateToHome()
-            Toast.makeText(this, "Please Login First", Toast.LENGTH_LONG).show();
         }
     }
 

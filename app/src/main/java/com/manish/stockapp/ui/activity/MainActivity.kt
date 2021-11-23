@@ -1,10 +1,7 @@
-package com.manish.stockapp
+package com.manish.stockapp.ui.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import com.firebase.ui.auth.AuthUI
+import com.manish.stockapp.R
 
 class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

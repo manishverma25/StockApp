@@ -1,22 +1,8 @@
-package com.manish.stockapp
+package com.manish.stockapp.ui.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.google.firebase.auth.FirebaseAuth
-import android.content.Intent
 import android.util.Log
-import android.widget.Toast
-
-import android.view.Menu
-import com.firebase.ui.auth.AuthUI
-
-import android.view.MenuItem
-
-
-
-
-
-
+import com.manish.stockapp.R
 
 
 class SplashActivity : BaseActivity()/*, FirebaseAuth.AuthStateListener */{

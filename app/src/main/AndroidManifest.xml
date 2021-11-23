@@ -10,9 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StockApp">
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.activity.LoginActivity"
             android:exported="true" />
-        <activity android:name=".SplashActivity">
+        <activity android:name=".ui.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +22,7 @@
         <activity
             android:name=".TestActivity"
             android:exported="true"></activity>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".ui.activity.MainActivity"></activity>
     </application>
 
 </manifest>
