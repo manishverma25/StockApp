@@ -8,19 +8,18 @@ import android.view.ViewGroup
 import com.manish.stockapp.R
 
 
-class FirstFragment : Fragment() {
+class HomeFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_first, container, false)
+        return inflater.inflate(R.layout.fragment_home_layout, container, false)
     }
 
     companion object {
-        fun newInstance( param1: String?, param2: String?): FirstFragment {
-            val fragment = FirstFragment()
+        fun newInstance( param1: String?, param2: String?): HomeFragment {
+            val fragment = HomeFragment()
             val args = Bundle()
             args.putString(ARG_PARAM1, param1)
             args.putString(ARG_PARAM2, param2)
