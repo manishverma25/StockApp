@@ -62,7 +62,8 @@ class DashboardFragment : Fragment() {
                     hideProgressBar()
                     response.data?.let { stockDetailsResponse ->
                         Log.d(TAG, " stockDetailsResponsessage :  ${stockDetailsResponse}")
-                        stockDetailsAdapter.differ.submitList(stockDetailsResponse)
+                        Log.d(TAG, " stockDetailsResponsessage data  :  ${stockDetailsResponse.data}")
+                        stockDetailsAdapter.differ.submitList(stockDetailsResponse.data)
                         rvPics.adapter = stockDetailsAdapter
                     }
                 }
