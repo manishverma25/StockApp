@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import android.content.Intent
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 
 
 class SplashActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
@@ -13,6 +14,8 @@ class SplashActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+        navigateToNext()
+//        startLoginActivity()
 
     }
 
@@ -40,6 +43,16 @@ class SplashActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
         finish()
     }
 
-    fun handleLoginRegister(view: View) {}
+    fun navigateToNext() {
+
+        Log.d(TAG," FirebaseAuth.getInstance().currentUser :::  ${FirebaseAuth.getInstance().currentUser} ")
+
+        if (FirebaseAuth.getInstance().currentUser == null) {
+            startLoginActivity()
+        } else {
+            navigateToHome()
+            Toast.makeText(this, "Please Login First", Toast.LENGTH_LONG).show();
+        }
+    }
 
 }
