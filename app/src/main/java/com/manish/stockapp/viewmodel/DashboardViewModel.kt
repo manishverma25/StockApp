@@ -2,26 +2,37 @@ package com.manish.stockapp.viewmodel
 
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.hadi.retrofitmvvm.util.Utils.hasInternetConnection
 import com.manish.stockapp.R
 import com.manish.stockapp.app.StockApplication
 import com.manish.stockapp.model.StockDetailsModel
 import com.manish.stockapp.repository.StockDetailsRepository
 import com.manish.stockapp.util.Resource
+import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
 
 class DashboardViewModel( app: StockApplication, private val appRepository: StockDetailsRepository) : AndroidViewModel(app)  {
 
+
     val stockDetailLiveData: MutableLiveData<Resource<StockDetailsModel>> = MutableLiveData()
 
+    init {
 
-    private suspend fun fetchStcokDetails() {
+        getStocksDetails()
+    }
+
+    private fun getStocksDetails() = viewModelScope.launch {
+        fetchStocksDetails()
+    }
+
+    private suspend fun fetchStocksDetails() {
         stockDetailLiveData.postValue(Resource.Loading())
 
         try {
             if (hasInternetConnection(getApplication<StockApplication>())) {
-                val response = appRepository.getPictures()
+                val response = appRepository.getStocksDetails()
                 stockDetailLiveData.postValue(handlePicsResponse(response))
             } else {
                 stockDetailLiveData.postValue(Resource.Error(getApplication<StockApplication>().getString(
@@ -55,4 +66,6 @@ class DashboardViewModel( app: StockApplication, private val appRepository: Stoc
         }
         return Resource.Error(response.message())
     }
+
+    val TAG ="DashboardViewModel"
 }

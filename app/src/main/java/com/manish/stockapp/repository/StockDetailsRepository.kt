@@ -4,6 +4,6 @@ import com.manish.stockapp.network.RetrofitInstance
 
 class StockDetailsRepository {
 
-    suspend fun getPictures() = RetrofitInstance.stockDetailsApi.getStockDetails()
+    suspend fun getStocksDetails() = RetrofitInstance.stockDetailsApi.getStockDetails()
 
 }
