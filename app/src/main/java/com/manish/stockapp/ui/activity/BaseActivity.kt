@@ -38,7 +38,6 @@ open class BaseActivity:  AppCompatActivity() , FirebaseAuth.AuthStateListener {
     }
 
     fun navigateToNext() {
-
         Log.d(TAG," FirebaseAuth.getInstance().currentUser :::  ${FirebaseAuth.getInstance().currentUser} ")
 
         if (FirebaseAuth.getInstance().currentUser == null) {

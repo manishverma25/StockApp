@@ -50,10 +50,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:19.1.0'
     implementation 'com.google.firebase:firebase-firestore:21.1.1'
     implementation 'com.google.firebase:firebase-storage:19.1.0'
+    implementation platform('com.google.firebase:firebase-bom:29.0.0')
 
     implementation 'androidx.multidex:multidex:2.0.1'
-
-
-    // Import the Firebase BoM
-    implementation platform('com.google.firebase:firebase-bom:29.0.0')
+    implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7.8'
 }
