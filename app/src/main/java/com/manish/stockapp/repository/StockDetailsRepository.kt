@@ -15,31 +15,26 @@ class StockDetailsRepository {
 
     private val db = FirebaseFirestore.getInstance()
     private val wishlistStockCollectionRef = db.collection(FIREBASE_COLLECTION_PATH)
-    private val wishlistStockDocumentRef =  db.document("StockDB/Stock Details")  // db.document(FIREBASE_DOCUMENT_PATH)
+    private val wishlistStockDocumentRef =
+        db.document("StockDB/Stock Details")  // db.document(FIREBASE_DOCUMENT_PATH)
 
-    fun saveDataToFavorite(stockDetailsList : List<StockDetailsModel>){
 
+    fun saveDataToFavorite(stockDetailsList: List<StockDetailsModel>) {
 
-        for(stock in stockDetailsList){
+        for (stock in stockDetailsList) {
             Log.d(TAG, "saveDataToFirebase  stock ::  $stock")
             wishlistStockCollectionRef.add(stock)
-//            wishlistStockDocumentRef.ad("sid", "Test")
-
-            //Map<String, Object> note = new HashMap<>();
-            //note.put(KEY_DESCRIPTION, description);
-            //noteRef.set(note, SetOptions.merge());
         }
 
     }
 
-    fun doAllUnFavorite(stockDetailsList : List<StockDetailsModel>){
-
+    fun doAllUnFavorite(stockDetailsList: List<StockDetailsModel>) {
         wishlistStockDocumentRef.delete()
 
     }
 
-    fun doFavorite(stockDetailsModel : StockDetailsModel){
-            wishlistStockCollectionRef.add(stockDetailsModel)
+    fun doFavorite(stockDetailsModel: StockDetailsModel) {
+        wishlistStockCollectionRef.add(stockDetailsModel)
     }
 
     companion object {

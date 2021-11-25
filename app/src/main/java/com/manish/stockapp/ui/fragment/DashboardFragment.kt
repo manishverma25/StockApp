@@ -23,6 +23,8 @@ class DashboardFragment : Fragment() {
     lateinit var stockDetailsAdapter: StockDetailsAdapter
 
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -92,7 +94,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun observeResetSelectedItemListLiveData(){
-        viewModel.isNeedTpResetSelectedItemListLiveData.observe(requireActivity(), Observer { isNeedToReset ->
+        viewModel.isNeedToResetSelectedItemListLiveData.observe(requireActivity(), Observer { isNeedToReset ->
 
             if(isNeedToReset){
 
@@ -119,7 +121,7 @@ class DashboardFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_favorite -> {
-                viewModel.doSaveFavorite()
+                doFavorite()
             }
 
             R.id.menu_delete_favorite -> {
@@ -130,6 +132,13 @@ class DashboardFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun doFavorite(){
+
+
+
+        viewModel.doSaveFavorite()
+    }
+
     private fun hideProgressBar() {
         progress.visibility = View.GONE
     }
@@ -137,6 +146,24 @@ class DashboardFragment : Fragment() {
     private fun showProgressBar() {
         progress.visibility = View.VISIBLE
     }
+
+
+
+    override fun onStart() {
+        super.onStart()
+
+
+    }
+
+
+
+
+    override fun onStop() {
+        super.onStop()
+    }
+
+
+
 
     companion object {
         fun newInstance(param1: String?, param2: String?): DashboardFragment {
