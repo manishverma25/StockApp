@@ -10,7 +10,7 @@ import retrofit2.http.POST
 
 interface API {
 
-    @GET("stocks/quotes?sids=RELI%2CTCS%2CITC%2CHDBK%2CINFY") //todo mvg
+    @GET("stocks/quotes?sids=RELI%2CTCS%2CITC%2CHDBK%2CINFY")
     suspend fun getStockDetails(): Response<SearchDetailsResponse>
 
 }

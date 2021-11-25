@@ -2,43 +2,75 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_60sdp"
-    android:padding="@dimen/_5sdp"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white">
 
 
     <TextView
+
         android:id="@+id/sidTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1"
         android:textColor="@color/black"
         android:textSize="@dimen/_12ssp"
+        tools:text="HUL"
+        android:paddingStart="@dimen/_5sdp"
+        android:layout_margin="@dimen/_5sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/dateTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_4sdp"
-        android:text="2086x2568"
-        android:layout_margin="@dimen/_5sdp"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_10ssp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sidTxt" />
 
     <TextView
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sidTxt"
-        android:id="@+id/priceTxt"
-        android:layout_margin="@dimen/_5sdp"
+        android:id="@+id/chnageTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
         android:layout_marginTop="@dimen/_4sdp"
-        android:text="John Doe"
+        tools:text="24"
+        android:paddingBottom="@dimen/_5sdp"
         android:textColor="@color/black"
-        android:textSize="@dimen/_12ssp" />
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintStart_toStartOf="@+id/sidTxt"
+        app:layout_constraintTop_toBottomOf="@id/sidTxt" />
+
+
+    <TextView
+        android:id="@+id/priceTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        tools:text="2222"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintStart_toEndOf="@+id/sidTxt"
+        app:layout_constraintTop_toTopOf="@id/sidTxt" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/stockChangePriceImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_10ssp"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:src="@drawable/ic_baseline_arrow_drop_up_24"
+        app:layout_constraintTop_toTopOf="@+id/priceTxt"
+        app:layout_constraintBottom_toBottomOf="@+id/priceTxt"
+        app:layout_constraintStart_toEndOf="@+id/priceTxt"
+         />
+
+    <CheckBox
+        android:id="@+id/stockitemCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/gray"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

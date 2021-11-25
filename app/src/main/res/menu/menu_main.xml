@@ -4,13 +4,13 @@
     tools:context="com.example.notesapp.MainActivity">
 
     <item
-        android:id="@+id/action_profile"
+        android:id="@+id/menu_favorite"
         android:orderInCategory="100"
-        android:title="Profile"
+        android:title="Favorite"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/action_logout"
-        android:orderInCategory="100"
-        android:title="Logout"
-        app:showAsAction="never" />
+<!--    <item-->
+<!--        android:id="@+id/action_logout"-->
+<!--        android:orderInCategory="100"-->
+<!--        android:title="Logout"-->
+<!--        app:showAsAction="never" />-->
 </menu>

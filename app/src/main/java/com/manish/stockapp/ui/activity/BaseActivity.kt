@@ -47,29 +47,29 @@ open class BaseActivity:  AppCompatActivity() , FirebaseAuth.AuthStateListener {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-        when (id) {
-            R.id.action_logout -> {
-                AuthUI.getInstance().signOut(this)
-                //todo after log out, souyld navigate to  login
-                return true
-            }
-            R.id.action_profile -> {
-//                startActivity(Intent(this, ProfileActivity::class.java))
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        menuInflater.inflate(R.menu.menu_main, menu)
+//        return true
+//    }
+//
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        val id = item.itemId
+//        when (id) {
+//            R.id.action_logout -> {
+//                AuthUI.getInstance().signOut(this)
+//                //todo after log out, souyld navigate to  login
+//                return true
+//            }
+//            R.id.action_profile -> {
+////                startActivity(Intent(this, ProfileActivity::class.java))
+//                return true
+//            }
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 }

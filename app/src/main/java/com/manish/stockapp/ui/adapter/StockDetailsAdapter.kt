@@ -3,6 +3,7 @@ package com.manish.stockapp.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -11,9 +12,9 @@ import com.manish.stockapp.model.StockDetailsModel
 import kotlinx.android.synthetic.main.layout_stock_details_item.view.*
 
 
-class StockDetailsAdapter : RecyclerView.Adapter<StockDetailsAdapter.PicsViewHolder>() {
+class StockDetailsAdapter : RecyclerView.Adapter<StockDetailsAdapter.StockDetailsViewHolder>() {
 
-    inner class PicsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
+    inner class StockDetailsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
     private val differCallback = object : DiffUtil.ItemCallback<StockDetailsModel>() {
         override fun areItemsTheSame(oldItem: StockDetailsModel, newItem: StockDetailsModel): Boolean {
@@ -27,7 +28,7 @@ class StockDetailsAdapter : RecyclerView.Adapter<StockDetailsAdapter.PicsViewHol
 
     val differ = AsyncListDiffer(this, differCallback)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = PicsViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = StockDetailsViewHolder(
         LayoutInflater.from(parent.context).inflate(
             R.layout.layout_stock_details_item,
             parent,
@@ -36,12 +37,19 @@ class StockDetailsAdapter : RecyclerView.Adapter<StockDetailsAdapter.PicsViewHol
     )
     override fun getItemCount() =  differ.currentList.size
 
-    override fun onBindViewHolder(holder: PicsViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: StockDetailsViewHolder, position: Int) {
         val stockDetailItem = differ.currentList[position]
         holder.itemView.apply {
             sidTxt.text = stockDetailItem.sid
-            dateTxt.text = stockDetailItem.date
+//            dateTxt.text = stockDetailItem.date
             priceTxt.text = stockDetailItem.price.toString()
         }
+
+        holder.itemView.stockitemCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
+            stockDetailItem.isSelected = isChecked
+        }
+
+        holder.itemView.stockitemCheckBox.isChecked = stockDetailItem.isSelected
+
     }
 }

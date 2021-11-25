@@ -5,6 +5,11 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import com.manish.stockapp.app.StockApplication
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+import androidx.annotation.NonNull
+import com.manish.stockapp.model.StockDetailsModel
+
 
 object Utils {
     fun hasInternetConnection(application: StockApplication): Boolean {
@@ -32,4 +37,14 @@ object Utils {
         }
         return false
     }
+
+
+     fun resetSelectedStockList(currentList:List<StockDetailsModel>){
+
+         for (stockDetailsItem in currentList){
+             if(stockDetailsItem.isSelected){
+                 stockDetailsItem.isSelected = false
+             }
+         }
+     }
 }
