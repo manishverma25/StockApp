@@ -22,7 +22,7 @@
 
 
     <TextView
-        android:id="@+id/chnageTxt"
+        android:id="@+id/changePriceTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_5sdp"
@@ -59,8 +59,8 @@
         app:layout_constraintStart_toEndOf="@+id/priceTxt"
          />
 
-    <CheckBox
-        android:id="@+id/stockitemCheckBox"
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/stockItemCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent" />

@@ -53,16 +53,15 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:6.0.1'
 
     implementation 'com.google.firebase:firebase-auth:19.1.0'
-    implementation 'com.google.firebase:firebase-firestore:21.1.1'
+    implementation 'com.google.firebase:firebase-firestore:21.1.1' // it transitive after    added com.firebaseui:firebase-ui-firestore
     implementation 'com.google.firebase:firebase-storage:19.1.0'
     implementation platform('com.google.firebase:firebase-bom:29.0.0')
 
+
+    implementation 'com.firebaseui:firebase-ui-firestore:8.0.0'
+
+
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7.8'
-
-
-
-
 
     // Architectural Components
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
@@ -81,6 +80,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:4.7.2"
 
     //UI
+    implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7.8'
     implementation 'com.google.android.material:material:1.2.1'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation 'com.intuit.sdp:sdp-android:1.0.6'

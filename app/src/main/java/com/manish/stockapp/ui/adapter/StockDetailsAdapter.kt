@@ -3,7 +3,6 @@ package com.manish.stockapp.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -41,15 +40,15 @@ class StockDetailsAdapter : RecyclerView.Adapter<StockDetailsAdapter.StockDetail
         val stockDetailItem = differ.currentList[position]
         holder.itemView.apply {
             sidTxt.text = stockDetailItem.sid
-//            dateTxt.text = stockDetailItem.date
+//            stockChangePriceImage.text = stockDetailItem.date
             priceTxt.text = stockDetailItem.price.toString()
         }
 
-        holder.itemView.stockitemCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
+        holder.itemView.stockItemCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
             stockDetailItem.isSelected = isChecked
         }
 
-        holder.itemView.stockitemCheckBox.isChecked = stockDetailItem.isSelected
+        holder.itemView.stockItemCheckBox.isChecked = stockDetailItem.isSelected
 
     }
 }
