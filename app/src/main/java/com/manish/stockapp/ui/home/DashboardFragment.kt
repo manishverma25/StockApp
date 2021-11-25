@@ -10,9 +10,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hadi.retrofitmvvm.util.Utils
 import com.manish.stockapp.StockApplication
-import com.manish.stockapp.data.FavoriteRepositoryImpl
+import com.manish.stockapp.domain.FavoriteRepositoryImpl
 import com.manish.stockapp.data.Resource
 import com.manish.stockapp.ViewModelProviderFactory
+import com.manish.stockapp.domain.NetworkDataRepositoryImpl
 import kotlinx.android.synthetic.main.fragment_home_layout.*
 
 
@@ -50,9 +51,10 @@ class DashboardFragment : Fragment() {
 
 
     private fun setupViewModel() {
-        val repository = FavoriteRepositoryImpl()
+        val favoriteRepository = FavoriteRepositoryImpl()
+        val networkRepository = NetworkDataRepositoryImpl()
         val factory =
-            ViewModelProviderFactory(activity?.applicationContext as StockApplication, repository)
+            ViewModelProviderFactory(activity?.applicationContext as StockApplication,networkRepository, favoriteRepository)
         viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
         observerLiveData()
     }

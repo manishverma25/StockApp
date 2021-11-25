@@ -11,16 +11,15 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.hadi.retrofitmvvm.util.Utils.hasInternetConnection
 import com.manish.stockapp.R
 import com.manish.stockapp.StockApplication
-import com.manish.stockapp.data.StockDetailsApiResponse
-import com.manish.stockapp.data.StockDetailsItem
-import com.manish.stockapp.data.FavoriteRepositoryImpl
+import com.manish.stockapp.data.*
+import com.manish.stockapp.domain.DataRepositoryUseCase
+import com.manish.stockapp.domain.FavoriteRepositoryUseCase
 import com.manish.stockapp.util.Constants.FIREBASE_COLLECTION_PATH
-import com.manish.stockapp.data.Resource
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
 
-class HomeViewModel(app: StockApplication, private val appRepositoryImpl: FavoriteRepositoryImpl) :
+class HomeViewModel(app: StockApplication, private val networkDataRepositoryUseCaseImpl: DataRepositoryUseCase, private val favoriteRepositoryImpl: FavoriteRepositoryUseCase) :
     AndroidViewModel(app) {
 
 
@@ -73,7 +72,7 @@ class HomeViewModel(app: StockApplication, private val appRepositoryImpl: Favori
 
         try {
             if (hasInternetConnection(getApplication<StockApplication>())) {
-                val response = appRepositoryImpl.getStocksDetails()
+                val response = networkDataRepositoryUseCaseImpl.getStocksDetails()
 
                 val stocksDetailsResponse = handleStockDetailsResponse(response)
 //                saveStocksToFireStore(stocksDetailsResponse.data?.data)
@@ -138,7 +137,7 @@ class HomeViewModel(app: StockApplication, private val appRepositoryImpl: Favori
         val stockDetailsWithoutDuplicacyList =
             selectedStockList.minus(alreadyWishListStockDetailsList)
         if(stockDetailsWithoutDuplicacyList .isNullOrEmpty()){
-            appRepositoryImpl.doFavorite(stockDetailsWithoutDuplicacyList)
+            favoriteRepositoryImpl.doFavorite(stockDetailsWithoutDuplicacyList)
         }else{
             // show msg stock  already   in wishj list
         }
@@ -165,6 +164,7 @@ class HomeViewModel(app: StockApplication, private val appRepositoryImpl: Favori
         isNeedToResetSelectedItemListLiveData.postValue(isNeedToReset)
     }
 
+    // doAllUnFavorite is for dev for purpose
 
     fun doAllUnFavorite() {
         Log.d(TAG, "doALlUnFavorite ......")
@@ -176,7 +176,7 @@ class HomeViewModel(app: StockApplication, private val appRepositoryImpl: Favori
         if (selectedStockList.isNullOrEmpty()) {
             return
         }
-        appRepositoryImpl.doAllUnFavorite()
+//        favoriteRepositoryImpl.doAllUnFavorite()
         resetSelectedItemList()
     }
 

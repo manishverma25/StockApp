@@ -1,5 +1,6 @@
 package com.manish.stockapp.network
 
+import com.manish.stockapp.api.ApiService
 import com.manish.stockapp.util.Constants.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -22,8 +23,8 @@ class RetrofitInstance {
                 .build()
         }
 
-        val stockDetailsApi by lazy {
-            retrofit.create(API::class.java)
+        val apiService by lazy {
+            retrofit.create(ApiService::class.java)
         }
 
     }
