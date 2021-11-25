@@ -1,4 +1,4 @@
-package com.manish.stockapp.ui.fragment
+package com.manish.stockapp.ui.wishlist
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,8 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.Query
-import com.manish.stockapp.model.StockDetailsModel
-import com.manish.stockapp.ui.adapter.WishListAdapter
+import com.manish.stockapp.data.StockDetailsItem
 import com.manish.stockapp.util.Constants.FIREBASE_COLLECTION_PATH
 import com.manish.stockapp.util.Constants.KEY_FIELD_FOR_FAVORITE
 import kotlinx.android.synthetic.main.fragment_second.*
@@ -45,8 +44,8 @@ class WishListFragment : Fragment() {
 
     private fun setUpRecyclerView() {
         val query: Query = wishlistStockCollectionRef.whereEqualTo(KEY_FIELD_FOR_FAVORITE, false)
-        val options: FirestoreRecyclerOptions<StockDetailsModel> = FirestoreRecyclerOptions.Builder<StockDetailsModel>()
-            .setQuery(query, StockDetailsModel::class.java)
+        val options: FirestoreRecyclerOptions<StockDetailsItem> = FirestoreRecyclerOptions.Builder<StockDetailsItem>()
+            .setQuery(query, StockDetailsItem::class.java)
             .build()
         adapter = WishListAdapter(options)
         wishListRecyclerView.setHasFixedSize(true)

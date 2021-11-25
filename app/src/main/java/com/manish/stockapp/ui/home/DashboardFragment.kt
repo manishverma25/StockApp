@@ -1,4 +1,4 @@
-package com.manish.stockapp.ui.fragment
+package com.manish.stockapp.ui.home
 
 import android.os.Bundle
 import android.util.Log
@@ -9,17 +9,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hadi.retrofitmvvm.util.Utils
-import com.manish.stockapp.app.StockApplication
-import com.manish.stockapp.repository.StockDetailsRepository
-import com.manish.stockapp.ui.adapter.StockDetailsAdapter
-import com.manish.stockapp.util.Resource
-import com.manish.stockapp.viewmodel.DashboardViewModel
-import com.manish.stockapp.viewmodel.ViewModelProviderFactory
+import com.manish.stockapp.StockApplication
+import com.manish.stockapp.data.FavoriteRepositoryImpl
+import com.manish.stockapp.data.Resource
+import com.manish.stockapp.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.fragment_home_layout.*
 
 
 class DashboardFragment : Fragment() {
-    private lateinit var viewModel: DashboardViewModel
+    private lateinit var viewModel: HomeViewModel
     lateinit var stockDetailsAdapter: StockDetailsAdapter
 
 
@@ -52,10 +50,10 @@ class DashboardFragment : Fragment() {
 
 
     private fun setupViewModel() {
-        val repository = StockDetailsRepository()
+        val repository = FavoriteRepositoryImpl()
         val factory =
             ViewModelProviderFactory(activity?.applicationContext as StockApplication, repository)
-        viewModel = ViewModelProvider(this, factory).get(DashboardViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
         observerLiveData()
     }
 
@@ -133,9 +131,6 @@ class DashboardFragment : Fragment() {
     }
 
     private fun doFavorite(){
-
-
-
         viewModel.doSaveFavorite()
     }
 

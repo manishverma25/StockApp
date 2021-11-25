@@ -1,20 +1,14 @@
-package com.manish.stockapp.ui.activity
+package com.manish.stockapp.ui.base
 
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
-import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.manish.stockapp.R
-import com.manish.stockapp.ui.fragment.DashboardFragment
-import com.manish.stockapp.ui.fragment.WishListFragment
-import com.manish.stockapp.ui.fragment.ProfileFragment
+import com.manish.stockapp.ui.home.DashboardFragment
+import com.manish.stockapp.ui.wishlist.WishListFragment
+import com.manish.stockapp.ui.profile.ProfileFragment
 import kotlinx.android.synthetic.main.activity_main.*
-
-import android.view.Menu
-
-
 
 
 class MainActivity : BaseActivity() {

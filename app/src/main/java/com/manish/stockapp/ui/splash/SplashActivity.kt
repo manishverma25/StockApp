@@ -1,8 +1,9 @@
-package com.manish.stockapp.ui.activity
+package com.manish.stockapp.ui.splash
 
 import android.os.Bundle
 import android.util.Log
 import com.manish.stockapp.R
+import com.manish.stockapp.ui.base.BaseActivity
 
 
 class SplashActivity : BaseActivity()/*, FirebaseAuth.AuthStateListener */{

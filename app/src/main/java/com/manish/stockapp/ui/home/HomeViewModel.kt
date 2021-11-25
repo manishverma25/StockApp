@@ -1,4 +1,4 @@
-package com.manish.stockapp.viewmodel
+package com.manish.stockapp.ui.home
 
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
@@ -10,27 +10,27 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
 import com.hadi.retrofitmvvm.util.Utils.hasInternetConnection
 import com.manish.stockapp.R
-import com.manish.stockapp.app.StockApplication
-import com.manish.stockapp.model.SearchDetailsResponse
-import com.manish.stockapp.model.StockDetailsModel
-import com.manish.stockapp.repository.StockDetailsRepository
+import com.manish.stockapp.StockApplication
+import com.manish.stockapp.data.StockDetailsApiResponse
+import com.manish.stockapp.data.StockDetailsItem
+import com.manish.stockapp.data.FavoriteRepositoryImpl
 import com.manish.stockapp.util.Constants.FIREBASE_COLLECTION_PATH
-import com.manish.stockapp.util.Resource
+import com.manish.stockapp.data.Resource
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
 
-class DashboardViewModel(app: StockApplication, private val appRepository: StockDetailsRepository) :
+class HomeViewModel(app: StockApplication, private val appRepositoryImpl: FavoriteRepositoryImpl) :
     AndroidViewModel(app) {
 
 
-    val stockDetailLiveData: MutableLiveData<Resource<SearchDetailsResponse>> = MutableLiveData()
+    val stockDetailLiveData: MutableLiveData<Resource<StockDetailsApiResponse>> = MutableLiveData()
 
     val isNeedToResetSelectedItemListLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val firebaseFirestore = FirebaseFirestore.getInstance()
     private val wishlistStockCollectionRef = firebaseFirestore.collection(FIREBASE_COLLECTION_PATH)
 
-    val alreadyWishListStockDetailsList = ArrayList<StockDetailsModel>()
+    val alreadyWishListStockDetailsList = ArrayList<StockDetailsItem>()
 
     init {
 
@@ -54,11 +54,11 @@ class DashboardViewModel(app: StockApplication, private val appRepository: Stock
                 }
                 alreadyWishListStockDetailsList.clear();
                 for (documentSnapshot in queryDocumentSnapshots) {
-                    val stockDetailsModel: StockDetailsModel =
-                        documentSnapshot.toObject(StockDetailsModel::class.java)
+                    val stockDetailsItem: StockDetailsItem =
+                        documentSnapshot.toObject(StockDetailsItem::class.java)
 //                    stockDetailsModel.setDocumentId(documentSnapshot.id)
-                    Log.d(TAG, "adding already stockDetailsModel : " + stockDetailsModel.sid)
-                    alreadyWishListStockDetailsList.add(stockDetailsModel)
+                    Log.d(TAG, "adding already stockDetailsModel : " + stockDetailsItem.sid)
+                    alreadyWishListStockDetailsList.add(stockDetailsItem)
                 }
             }
         })
@@ -73,7 +73,7 @@ class DashboardViewModel(app: StockApplication, private val appRepository: Stock
 
         try {
             if (hasInternetConnection(getApplication<StockApplication>())) {
-                val response = appRepository.getStocksDetails()
+                val response = appRepositoryImpl.getStocksDetails()
 
                 val stocksDetailsResponse = handleStockDetailsResponse(response)
 //                saveStocksToFireStore(stocksDetailsResponse.data?.data)
@@ -107,7 +107,7 @@ class DashboardViewModel(app: StockApplication, private val appRepository: Stock
         }
     }
 
-    private fun handleStockDetailsResponse(response: Response<SearchDetailsResponse>): Resource<SearchDetailsResponse> {
+    private fun handleStockDetailsResponse(response: Response<StockDetailsApiResponse>): Resource<StockDetailsApiResponse> {
         if (response.isSuccessful) {
             response.body()?.let { resultResponse ->
                 return Resource.Success(resultResponse)
@@ -138,7 +138,7 @@ class DashboardViewModel(app: StockApplication, private val appRepository: Stock
         val stockDetailsWithoutDuplicacyList =
             selectedStockList.minus(alreadyWishListStockDetailsList)
         if(stockDetailsWithoutDuplicacyList .isNullOrEmpty()){
-            appRepository.saveDataToFavorite(stockDetailsWithoutDuplicacyList)
+            appRepositoryImpl.doFavorite(stockDetailsWithoutDuplicacyList)
         }else{
             // show msg stock  already   in wishj list
         }
@@ -151,8 +151,8 @@ class DashboardViewModel(app: StockApplication, private val appRepository: Stock
         isNeedToResetSelectedItemListLiveData.postValue(true)
     }
 
-    fun getSelectedStockList(allStocksList: ArrayList<StockDetailsModel>): ArrayList<StockDetailsModel> {
-        val selectedStockList = ArrayList<StockDetailsModel>()
+    fun getSelectedStockList(allStocksList: ArrayList<StockDetailsItem>): ArrayList<StockDetailsItem> {
+        val selectedStockList = ArrayList<StockDetailsItem>()
         for (stockDetailsItem in allStocksList) {
             if (stockDetailsItem.isSelected) {
                 selectedStockList.add(stockDetailsItem)
@@ -176,7 +176,7 @@ class DashboardViewModel(app: StockApplication, private val appRepository: Stock
         if (selectedStockList.isNullOrEmpty()) {
             return
         }
-        appRepository.doAllUnFavorite(selectedStockList)
+        appRepositoryImpl.doAllUnFavorite()
         resetSelectedItemList()
     }
 

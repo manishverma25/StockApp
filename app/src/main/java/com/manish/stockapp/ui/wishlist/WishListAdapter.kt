@@ -1,18 +1,15 @@
-package com.manish.stockapp.ui.adapter
+package com.manish.stockapp.ui.wishlist
 
 
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 import android.view.LayoutInflater
 
 import android.view.ViewGroup
 
-import com.manish.stockapp.model.StockDetailsModel
+import com.manish.stockapp.data.StockDetailsItem
 
 import android.view.View;
-import android.widget.ImageView
-import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 
@@ -22,12 +19,12 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.manish.stockapp.R
 
 
-class WishListAdapter(options: FirestoreRecyclerOptions<StockDetailsModel>) :
-    FirestoreRecyclerAdapter<StockDetailsModel, WishListAdapter.NoteHolder?>(options) {
-     override fun onBindViewHolder(holder: NoteHolder, position: Int, model: StockDetailsModel) {
-         holder.sidTxt.text = model.sid
-        holder.priceTxt.text = model.price.toString()
-         holder.changePriceTxt.text = model.change.toString()
+class WishListAdapter(options: FirestoreRecyclerOptions<StockDetailsItem>) :
+    FirestoreRecyclerAdapter<StockDetailsItem, WishListAdapter.NoteHolder?>(options) {
+     override fun onBindViewHolder(holder: NoteHolder, position: Int, item: StockDetailsItem) {
+         holder.sidTxt.text = item.sid
+        holder.priceTxt.text = item.price.toString()
+         holder.changePriceTxt.text = item.change.toString()
          holder.stockChangePriceImage   //todo 11 add logic for up down
     }
 

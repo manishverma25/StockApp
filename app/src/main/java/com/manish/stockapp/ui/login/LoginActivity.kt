@@ -1,4 +1,4 @@
-package com.manish.stockapp.ui.activity
+package com.manish.stockapp.ui.login
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

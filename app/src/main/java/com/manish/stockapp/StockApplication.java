@@ -1,4 +1,4 @@
-package com.manish.stockapp.app;
+package com.manish.stockapp;
 
 import android.app.Application;
 

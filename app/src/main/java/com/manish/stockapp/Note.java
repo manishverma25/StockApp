@@ -1,7 +1,7 @@
 package com.manish.stockapp;
 
 import com.google.firebase.firestore.Exclude;
-
+// Dummy Class Ignore it , its to learn firestore
 public class Note {
     private String documentId;
     private String title;

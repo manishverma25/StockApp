@@ -1,4 +1,4 @@
-package com.manish.stockapp.util
+package com.manish.stockapp.data
 
 sealed class Resource<T>(
     val data: T? = null,

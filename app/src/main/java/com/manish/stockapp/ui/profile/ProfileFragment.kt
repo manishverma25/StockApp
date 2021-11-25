@@ -1,4 +1,4 @@
-package com.manish.stockapp.ui.fragment
+package com.manish.stockapp.ui.profile
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

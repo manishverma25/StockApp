@@ -1,15 +1,12 @@
-package com.manish.stockapp.repository
+package com.manish.stockapp.data
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.manish.stockapp.model.StockDetailsModel
 import com.manish.stockapp.network.RetrofitInstance
 import com.manish.stockapp.util.Constants.FIREBASE_COLLECTION_PATH
-import com.manish.stockapp.util.Constants.FIREBASE_DOCUMENT_PATH
-import com.manish.stockapp.util.Constants.KEY_FIELD_FOR_FAVORITE
 
 
-class StockDetailsRepository {
+class FavoriteRepositoryImpl {
 
     suspend fun getStocksDetails() = RetrofitInstance.stockDetailsApi.getStockDetails()
 
@@ -19,8 +16,7 @@ class StockDetailsRepository {
         db.document("StockDB/Stock Details")  // db.document(FIREBASE_DOCUMENT_PATH)
 
 
-    fun saveDataToFavorite(stockDetailsList: List<StockDetailsModel>) {
-
+    fun doFavorite(stockDetailsList: List<StockDetailsItem>) {
         for (stock in stockDetailsList) {
             Log.d(TAG, "saveDataToFirebase  stock ::  $stock")
             wishlistStockCollectionRef.add(stock)
@@ -28,13 +24,9 @@ class StockDetailsRepository {
 
     }
 
-    fun doAllUnFavorite(stockDetailsList: List<StockDetailsModel>) {
+    fun doAllUnFavorite() {
         wishlistStockDocumentRef.delete()
 
-    }
-
-    fun doFavorite(stockDetailsModel: StockDetailsModel) {
-        wishlistStockCollectionRef.add(stockDetailsModel)
     }
 
     companion object {

@@ -1,13 +1,10 @@
-package com.manish.stockapp.ui.activity
+package com.manish.stockapp.ui.base
 
 import android.content.Intent
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
-import com.manish.stockapp.R
+import com.manish.stockapp.ui.login.LoginActivity
 
 open class BaseActivity:  AppCompatActivity() , FirebaseAuth.AuthStateListener {
     val TAG = "BaseActivity"

@@ -4,11 +4,9 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import com.manish.stockapp.app.StockApplication
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import com.manish.stockapp.StockApplication
 
-import androidx.annotation.NonNull
-import com.manish.stockapp.model.StockDetailsModel
+import com.manish.stockapp.data.StockDetailsItem
 
 
 object Utils {
@@ -39,7 +37,7 @@ object Utils {
     }
 
 
-     fun resetSelectedStockList(currentList:List<StockDetailsModel>){
+     fun resetSelectedStockList(currentList:List<StockDetailsItem>){
 
          for (stockDetailsItem in currentList){
              if(stockDetailsItem.isSelected){

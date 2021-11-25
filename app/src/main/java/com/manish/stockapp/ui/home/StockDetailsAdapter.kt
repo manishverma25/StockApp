@@ -1,4 +1,4 @@
-package com.manish.stockapp.ui.adapter
+package com.manish.stockapp.ui.home
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.manish.stockapp.R
-import com.manish.stockapp.model.StockDetailsModel
+import com.manish.stockapp.data.StockDetailsItem
 import kotlinx.android.synthetic.main.layout_stock_details_item.view.*
 
 
@@ -15,12 +15,12 @@ class StockDetailsAdapter : RecyclerView.Adapter<StockDetailsAdapter.StockDetail
 
     inner class StockDetailsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
-    private val differCallback = object : DiffUtil.ItemCallback<StockDetailsModel>() {
-        override fun areItemsTheSame(oldItem: StockDetailsModel, newItem: StockDetailsModel): Boolean {
+    private val differCallback = object : DiffUtil.ItemCallback<StockDetailsItem>() {
+        override fun areItemsTheSame(oldItem: StockDetailsItem, newItem: StockDetailsItem): Boolean {
             return oldItem.sid == newItem.sid
         }
 
-        override fun areContentsTheSame(oldItem: StockDetailsModel, newItem: StockDetailsModel): Boolean {
+        override fun areContentsTheSame(oldItem: StockDetailsItem, newItem: StockDetailsItem): Boolean {
             return oldItem == newItem
         }
     }
