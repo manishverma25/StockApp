@@ -1,7 +1,6 @@
 package com.manish.stockapp.network
 
 import com.manish.stockapp.util.Constants.BASE_URL
-import com.manish.stockapp.util.Constants.BASE_URL_2
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

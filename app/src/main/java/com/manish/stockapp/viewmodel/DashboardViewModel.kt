@@ -91,7 +91,7 @@ class DashboardViewModel( app: StockApplication, private val appRepository: Stoc
             //todo update live data that  no item  selected //or it can be done by menu item disable
             return
         }
-
+       // todo call in background thread
         appRepository.saveDataToFavorite(selectedStockList)
         resetSelectedItemList()
     }
@@ -117,18 +117,20 @@ class DashboardViewModel( app: StockApplication, private val appRepository: Stoc
 
 
 
+    fun doAllUnFavorite() {
+        Log.d(TAG, "doALlUnFavorite ......")
+        val allStockDetailsList = stockDetailLiveData.value?.data?.data
+        if (allStockDetailsList.isNullOrEmpty()) {
+            return
+        }
+        val selectedStockList = getSelectedStockList(allStockDetailsList)
+        if (selectedStockList.isNullOrEmpty()) {
+            return
+        }
 
-
-//    private fun saveStocksToFireStore( stockDetailsList : List<StockDetailsModel>? ){
-//        if(stockDetailsList == null || stockDetailsList.isEmpty()){
-//            //todo update live data that  no stock found
-//            return
-//        }
-//        appRepository.saveDataToFavorite(stockDetailsList)
-//
-//
-//    }
-
+        appRepository.doAllUnFavorite(selectedStockList)
+//        resetSelectedItemList()
+    }
 
 
 

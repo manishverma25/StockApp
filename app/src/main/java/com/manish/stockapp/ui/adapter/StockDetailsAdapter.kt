@@ -40,10 +40,11 @@ class StockDetailsAdapter : RecyclerView.Adapter<StockDetailsAdapter.StockDetail
         val stockDetailItem = differ.currentList[position]
         holder.itemView.apply {
             sidTxt.text = stockDetailItem.sid
-//            stockChangePriceImage.text = stockDetailItem.date
+            changePriceTxt.text = stockDetailItem.change.toString()
             priceTxt.text = stockDetailItem.price.toString()
         }
 
+        holder.itemView.stockItemCheckBox.visibility = View.VISIBLE
         holder.itemView.stockItemCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
             stockDetailItem.isSelected = isChecked
         }

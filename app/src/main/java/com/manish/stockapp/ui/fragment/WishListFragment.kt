@@ -17,14 +17,15 @@ import com.google.firebase.firestore.Query
 import com.manish.stockapp.model.StockDetailsModel
 import com.manish.stockapp.ui.adapter.WishListAdapter
 import com.manish.stockapp.util.Constants.FIREBASE_COLLECTION_PATH
+import com.manish.stockapp.util.Constants.KEY_FIELD_FOR_FAVORITE
 import kotlinx.android.synthetic.main.fragment_second.*
 
 
 class WishListFragment : Fragment() {
 
 
-    private val db = FirebaseFirestore.getInstance()
-    private val notebookRef = db.collection(FIREBASE_COLLECTION_PATH)
+    private val firebaseFirestore = FirebaseFirestore.getInstance()
+    private val wishlistStockCollectionRef = firebaseFirestore.collection(FIREBASE_COLLECTION_PATH)
 
     private var adapter: WishListAdapter? = null
 
@@ -32,7 +33,6 @@ class WishListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_second, container, false)
     }
 
@@ -44,7 +44,7 @@ class WishListFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        val query: Query = notebookRef.whereEqualTo("favorite", false)
+        val query: Query = wishlistStockCollectionRef.whereEqualTo(KEY_FIELD_FOR_FAVORITE, false)
         val options: FirestoreRecyclerOptions<StockDetailsModel> = FirestoreRecyclerOptions.Builder<StockDetailsModel>()
             .setQuery(query, StockDetailsModel::class.java)
             .build()

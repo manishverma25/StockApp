@@ -6,6 +6,7 @@ import com.manish.stockapp.model.StockDetailsModel
 import com.manish.stockapp.network.RetrofitInstance
 import com.manish.stockapp.util.Constants.FIREBASE_COLLECTION_PATH
 import com.manish.stockapp.util.Constants.FIREBASE_DOCUMENT_PATH
+import com.manish.stockapp.util.Constants.KEY_FIELD_FOR_FAVORITE
 
 
 class StockDetailsRepository {
@@ -13,21 +14,32 @@ class StockDetailsRepository {
     suspend fun getStocksDetails() = RetrofitInstance.stockDetailsApi.getStockDetails()
 
     private val db = FirebaseFirestore.getInstance()
-    private val wishlistStockDetailRef = db.collection(FIREBASE_COLLECTION_PATH)
-    private val wishlistStockDocument = db.document(FIREBASE_DOCUMENT_PATH)
+    private val wishlistStockCollectionRef = db.collection(FIREBASE_COLLECTION_PATH)
+    private val wishlistStockDocumentRef =  db.document("StockDB/Stock Details")  // db.document(FIREBASE_DOCUMENT_PATH)
 
     fun saveDataToFavorite(stockDetailsList : List<StockDetailsModel>){
 
-        // todo call in background thread
+
         for(stock in stockDetailsList){
             Log.d(TAG, "saveDataToFirebase  stock ::  $stock")
-            wishlistStockDetailRef.add(stock)
+            wishlistStockCollectionRef.add(stock)
+//            wishlistStockDocumentRef.ad("sid", "Test")
+
+            //Map<String, Object> note = new HashMap<>();
+            //note.put(KEY_DESCRIPTION, description);
+            //noteRef.set(note, SetOptions.merge());
         }
 
     }
 
+    fun doAllUnFavorite(stockDetailsList : List<StockDetailsModel>){
+
+        wishlistStockDocumentRef.delete()
+
+    }
+
     fun doFavorite(stockDetailsModel : StockDetailsModel){
-            wishlistStockDetailRef.add(stockDetailsModel)
+            wishlistStockCollectionRef.add(stockDetailsModel)
     }
 
     companion object {

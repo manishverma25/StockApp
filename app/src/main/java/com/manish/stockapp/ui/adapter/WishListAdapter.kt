@@ -29,13 +29,11 @@ class WishListAdapter(options: FirestoreRecyclerOptions<StockDetailsModel>) :
         holder.priceTxt.text = model.price.toString()
          holder.changePriceTxt.text = model.change.toString()
          holder.stockChangePriceImage   //todo 11 add logic for up down
-
-         holder.stockItemCheckBox.visibility = View.GONE
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteHolder {
         val v: View = LayoutInflater.from(parent.context).inflate(
-            R.layout.layout_stock_details_item,
+            R.layout.layout_wishlist_stock_item,
             parent, false
         )
         return NoteHolder(v)
@@ -46,7 +44,6 @@ class WishListAdapter(options: FirestoreRecyclerOptions<StockDetailsModel>) :
         var priceTxt: AppCompatTextView = itemView.findViewById(R.id.priceTxt)
         var changePriceTxt: AppCompatTextView = itemView.findViewById(R.id.changePriceTxt)
         var stockChangePriceImage: AppCompatImageView = itemView.findViewById(R.id.stockChangePriceImage)
-        var stockItemCheckBox: AppCompatCheckBox = itemView.findViewById(R.id.stockItemCheckBox)
 
     }
 }

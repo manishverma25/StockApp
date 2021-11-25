@@ -8,9 +8,16 @@
         android:orderInCategory="100"
         android:title="Favorite"
         app:showAsAction="never" />
-<!--    <item-->
-<!--        android:id="@+id/action_logout"-->
-<!--        android:orderInCategory="100"-->
-<!--        android:title="Logout"-->
-<!--        app:showAsAction="never" />-->
+    <item
+        android:id="@+id/menu_logout"
+        android:orderInCategory="100"
+        android:title="Logout"
+        app:showAsAction="never" />
+
+<!--    menu_delete_favorite its for dev purpose -->
+    <item
+        android:id="@+id/menu_delete_favorite"
+        android:orderInCategory="100"
+        android:title="Delete Favorite"
+        app:showAsAction="never" />
 </menu>

@@ -71,7 +71,6 @@ class DashboardFragment : Fragment() {
                 is Resource.Success -> {
                     hideProgressBar()
                     response.data?.let { stockDetailsResponse ->
-                        Log.d(TAG, " stockDetailsResponsessage :  ${stockDetailsResponse}")
                         Log.d(TAG, " stockDetailsResponsessage data  :  ${stockDetailsResponse.data}")
                         stockDetailsAdapter.differ.submitList(stockDetailsResponse.data)
                         rvPics.adapter = stockDetailsAdapter
@@ -121,8 +120,12 @@ class DashboardFragment : Fragment() {
         when (item.itemId) {
             R.id.menu_favorite -> {
                 viewModel.doSaveFavorite()
-                return true
             }
+
+            R.id.menu_delete_favorite -> {
+                viewModel.doAllUnFavorite()
+            }
+
         }
         return super.onOptionsItemSelected(item)
     }
