@@ -38,7 +38,7 @@ class HomeViewModel @Inject constructor (
 
     val stockDetailLiveData: MutableLiveData<Resource<StockDetailsApiResponse>> = MutableLiveData()
 
-    val isNeedToResetSelectedItemListLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    val isNeedToResetSelectedItemListLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
 //    private val firebaseFirestore = FirebaseFirestore.getInstance()
 //    private val wishlistStockCollectionRef = firebaseFirestore.collection(FIREBASE_COLLECTION_PATH)
 
@@ -47,8 +47,9 @@ class HomeViewModel @Inject constructor (
 
     val alreadyWishListStockDetailsList = ArrayList<StockDetailsItem>()
 
+    val stockDetailsApiHitLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
+
     init {
-        setIsNeedTpResetSelectedItemListLiveData(false)
         initStockListener()
     }
 
@@ -85,7 +86,8 @@ class HomeViewModel @Inject constructor (
 
 
      fun getStocksData() = viewModelScope.launch (ioContext) {
-        fetchStocksDetails()
+         stockDetailsApiHitLiveData.postValue(true)
+         fetchStocksDetails()
     }
 
     suspend fun fetchStocksDetails() {

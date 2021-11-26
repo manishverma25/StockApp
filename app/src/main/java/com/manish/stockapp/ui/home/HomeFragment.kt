@@ -1,8 +1,11 @@
 package com.manish.stockapp.ui.home
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.manish.stockapp.R
 import androidx.lifecycle.Observer
@@ -15,7 +18,10 @@ import com.manish.stockapp.domain.FavoriteRepositoryImpl
 import com.manish.stockapp.data.Resource
 import com.manish.stockapp.ViewModelProviderFactory
 import com.manish.stockapp.domain.NetworkDataRepositoryImpl
+import com.manish.stockapp.util.Constants
 import kotlinx.android.synthetic.main.fragment_home_layout.*
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -26,6 +32,16 @@ class HomeFragment : Fragment() {
 
     private val viewModel: HomeViewModel by lazy {
         ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
+    }
+
+
+    val perodicHandler = Handler(Looper.getMainLooper())
+
+    val mRunnable = object: Runnable {
+        override fun run() {
+            viewModel.getStocksData()
+            perodicHandler.postDelayed(this, Constants.STOCK_DEATILS_API_PERIODIC_TIMER)
+        }
     }
 
 
@@ -58,6 +74,40 @@ class HomeFragment : Fragment() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        /**
+         * Start the api call periodically after 5 sec
+         */
+       startPerodicAPiCall()
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        /**
+         * Stop  the api call periodically after 5 sec
+         */
+        stopPerodicApiCall()
+    }
+//    val executorService =   Executors.newSingleThreadScheduledExecutor()
+
+    fun startPerodicAPiCall(){
+      perodicHandler.post(mRunnable)
+
+//        executorService.scheduleAtFixedRate({
+//            Log.d(TAG, " executorService called  ..  ")
+//            viewModel.getStocksData()
+//
+//        }, 1, 2, TimeUnit.SECONDS)
+    }
+
+
+    fun stopPerodicApiCall(){
+        perodicHandler.removeCallbacks(mRunnable)
+    }
+
+
 
     private fun init() {
         rvPics.setHasFixedSize(true)
@@ -68,13 +118,8 @@ class HomeFragment : Fragment() {
 
 
     private fun setupViewModel() {
-        val favoriteRepository = FavoriteRepositoryImpl()
-        val networkRepository = NetworkDataRepositoryImpl()
-//        val factory =
-//            ViewModelProviderFactory(activity?.applicationContext as StockApplication,networkRepository, favoriteRepository)
-//        viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
         observerLiveData()
-        viewModel.getStocksData()
+
     }
 
 
@@ -82,6 +127,7 @@ class HomeFragment : Fragment() {
         Log.d(TAG, " called observerLiveData() .2222. ")
         observerStockDetailLiveData()
         observeResetSelectedItemListLiveData()
+        observeStockDetailsApiHitLiveData()
 
     }
 
@@ -115,14 +161,22 @@ class HomeFragment : Fragment() {
         viewModel.isNeedToResetSelectedItemListLiveData.observe(requireActivity(), Observer { isNeedToReset ->
 
             if(isNeedToReset){
-
                 Utils.resetSelectedStockList(stockDetailsAdapter.differ.currentList)
-                stockDetailsAdapter.notifyDataSetChanged() //todo optimize it
+                stockDetailsAdapter.notifyDataSetChanged()
                 viewModel.setIsNeedTpResetSelectedItemListLiveData(false)
             }
+        })
+    }
 
 
 
+    private fun observeStockDetailsApiHitLiveData(){
+        viewModel.stockDetailsApiHitLiveData.observe(requireActivity(), Observer { isApiHit ->
+
+            Log.d(TAG, " observeStockDetailsApiHitLiveData ... $isApiHit   . ")
+            if(isApiHit){
+                Toast.makeText(requireContext(),"Stock live details API Hit ",Toast.LENGTH_SHORT).show()
+            }
         })
     }
 
@@ -164,18 +218,7 @@ class HomeFragment : Fragment() {
 
 
 
-    override fun onStart() {
-        super.onStart()
 
-
-    }
-
-
-
-
-    override fun onStop() {
-        super.onStop()
-    }
 
 
 
@@ -184,7 +227,7 @@ class HomeFragment : Fragment() {
         fun newInstance(): HomeFragment {
             return   HomeFragment()
         }
-        val TAG = "DashboardFragment"
+        val TAG = "HomeFragment"
     }
 
 

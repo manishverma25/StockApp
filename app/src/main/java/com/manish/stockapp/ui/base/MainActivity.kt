@@ -39,6 +39,10 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
                 2 -> openFragment(ProfileFragment.newInstance())
             }
         }
+        if (FirebaseAuth.getInstance().currentUser == null) {
+            startLoginActivity()
+            return
+        }
         openFragment(HomeFragment.newInstance())
 
     }
@@ -69,6 +73,7 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
             startLoginActivity()
         }
     }
+
 
     private fun startLoginActivity() {
         val intent = Intent(this, LoginActivity::class.java)
