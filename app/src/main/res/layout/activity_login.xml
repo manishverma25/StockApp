@@ -6,17 +6,31 @@
     android:layout_height="match_parent"
     >
 
+
     <TextView
-        android:id="@+id/titleTxt"
+        android:id="@+id/appNameTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login"
+        android:text="@string/app_name"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="@dimen/text_size_headline"
         app:layout_constraintStart_toStartOf="parent"
-        android:onClick="handleLogin"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_via_firebase"
+        android:layout_marginTop="@dimen/_20ssp"
+        android:textColor="@color/red"
+        app:layout_constraintTop_toBottomOf="@+id/appNameTxt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:onClick="handleLogin"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

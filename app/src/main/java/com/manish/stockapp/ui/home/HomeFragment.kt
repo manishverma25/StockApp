@@ -181,17 +181,9 @@ class HomeFragment : Fragment() {
 
 
     companion object {
-        fun newInstance(param1: String?, param2: String?): HomeFragment {
-            val fragment = HomeFragment()
-            val args = Bundle()
-            args.putString(ARG_PARAM1, param1)
-            args.putString(ARG_PARAM2, param2)
-            fragment.arguments = args
-            return fragment
+        fun newInstance(): HomeFragment {
+            return   HomeFragment()
         }
-
-        private val ARG_PARAM1 = "param1"
-        private val ARG_PARAM2 = "param2"
         val TAG = "DashboardFragment"
     }
 

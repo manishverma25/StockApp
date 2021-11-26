@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StockApp</string>
+    <string name="app_name">Stock App</string>
     <string name="login">Login</string>
     <string name="menu_home">Home</string>
     <string name="menu_wishlist">Wishlist</string>
@@ -9,4 +9,5 @@
     <string name="network_failure">Network Failure</string>
     <string name="api_failure">Api Failure</string>
     <string name="sign_out">Sign Out</string>
+    <string name="login_via_firebase">Login via firebase</string>
 </resources>

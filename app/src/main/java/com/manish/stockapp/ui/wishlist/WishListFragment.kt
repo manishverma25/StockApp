@@ -67,13 +67,8 @@ class WishListFragment : Fragment() {
 
 
     companion object {
-        fun newInstance( param1: String?, param2: String?): WishListFragment {
-            val fragment = WishListFragment()
-            val args = Bundle()
-            args.putString(ARG_PARAM1, param1)
-            args.putString(ARG_PARAM2, param2)
-            fragment.arguments = args
-            return fragment
+        fun newInstance(): WishListFragment {
+            return WishListFragment()
         }
 
         private val ARG_PARAM1 = "param1"

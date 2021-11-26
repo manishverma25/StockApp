@@ -39,13 +39,18 @@ class StockDetailsAdapter : RecyclerView.Adapter<StockDetailsAdapter.StockDetail
     override fun onBindViewHolder(holder: StockDetailsViewHolder, position: Int) {
         val stockDetailItem = differ.currentList[position]
         holder.itemView.apply {
-            sidTxt.text = stockDetailItem.sid
+            stockNameTxt.text = stockDetailItem.sid
             changePriceTxt.text = stockDetailItem.change.toString()
             priceTxt.text = stockDetailItem.price.toString()
+            if(stockDetailItem.change >0){
+                stockChangePriceImage.setImageResource(R.drawable.ic_up_icon)
+            }else{
+                stockChangePriceImage.setImageResource(R.drawable.ic_down_icon)
+            }
         }
 
         holder.itemView.stockItemCheckBox.visibility = View.VISIBLE
-        holder.itemView.stockItemCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
+        holder.itemView.stockItemCheckBox.setOnCheckedChangeListener { _, isChecked ->
             stockDetailItem.isSelected = isChecked
         }
 

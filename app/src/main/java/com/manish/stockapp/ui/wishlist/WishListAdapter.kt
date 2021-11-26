@@ -37,7 +37,7 @@ class WishListAdapter(options: FirestoreRecyclerOptions<StockDetailsItem>) :
     }
 
     inner class NoteHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var sidTxt: AppCompatTextView = itemView.findViewById(R.id.sidTxt)
+        var sidTxt: AppCompatTextView = itemView.findViewById(R.id.stockNameTxt)
         var priceTxt: AppCompatTextView = itemView.findViewById(R.id.priceTxt)
         var changePriceTxt: AppCompatTextView = itemView.findViewById(R.id.changePriceTxt)
         var stockChangePriceImage: AppCompatImageView = itemView.findViewById(R.id.stockChangePriceImage)
