@@ -3,6 +3,7 @@ package com.manish.stockapp.di.component
 import android.app.Application
 import com.manish.stockapp.StockApplication
 import com.manish.stockapp.ViewModelFactory
+import com.manish.stockapp.di.module.AppModule
 import com.manish.stockapp.di.module.NetworkModule
 import com.manish.stockapp.di.module.ViewModelModule
 import com.manish.stockapp.ui.base.MainActivity
@@ -14,8 +15,8 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [NetworkModule::class,
-        ViewModelModule::class
-//        AppModule::class
+        ViewModelModule::class,
+        AppModule::class,
     ]
 )
 interface AppComponent {

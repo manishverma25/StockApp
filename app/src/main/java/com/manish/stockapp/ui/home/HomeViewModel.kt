@@ -18,12 +18,13 @@ import com.manish.stockapp.domain.FavoriteRepositoryImpl
 import com.manish.stockapp.domain.FavoriteRepositoryUseCase
 import com.manish.stockapp.domain.NetworkDataRepositoryImpl
 import com.manish.stockapp.util.Constants.FIREBASE_COLLECTION_PATH
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
 
-class HomeViewModel @Inject constructor (val networkDataRepositoryUseCaseImpl: NetworkDataRepositoryImpl, val favoriteRepositoryImpl: FavoriteRepositoryImpl) :
+class HomeViewModel @Inject constructor (val networkDataRepositoryUseCaseImpl: DataRepositoryUseCase, val favoriteRepositoryImpl: FavoriteRepositoryUseCase) :
     ViewModel() {
 
 
@@ -38,6 +39,7 @@ class HomeViewModel @Inject constructor (val networkDataRepositoryUseCaseImpl: N
 
     init {
 
+        Log.d(TAG, "HomeViewModel init 3333 ...  ")
         setIsNeedTpResetSelectedItemListLiveData(false)
         getStocksDetails()
         initStockListner()
@@ -53,7 +55,7 @@ class HomeViewModel @Inject constructor (val networkDataRepositoryUseCaseImpl: N
                     return
                 }
                 if (queryDocumentSnapshots == null) {
-                    Log.d(TAG, "No record foudn in firebase : ")
+                    Log.d(Companion.TAG, "No record foudn in firebase : ")
                     return
                 }
                 alreadyWishListStockDetailsList.clear();
@@ -61,7 +63,7 @@ class HomeViewModel @Inject constructor (val networkDataRepositoryUseCaseImpl: N
                     val stockDetailsItem: StockDetailsItem =
                         documentSnapshot.toObject(StockDetailsItem::class.java)
 //                    stockDetailsModel.setDocumentId(documentSnapshot.id)
-                    Log.d(TAG, "adding already stockDetailsModel : " + stockDetailsItem.sid)
+                    Log.d(Companion.TAG, "adding already stockDetailsModel : " + stockDetailsItem.sid)
                     alreadyWishListStockDetailsList.add(stockDetailsItem)
                 }
             }
@@ -71,6 +73,7 @@ class HomeViewModel @Inject constructor (val networkDataRepositoryUseCaseImpl: N
 
 
     private fun getStocksDetails() = viewModelScope.launch {
+//        Dispatchers.IO
         fetchStocksDetails()
     }
 
@@ -124,7 +127,7 @@ class HomeViewModel @Inject constructor (val networkDataRepositoryUseCaseImpl: N
 
 
     fun doSaveFavorite() {
-        Log.d(TAG, "doSaveFavorite ......")
+        Log.d(Companion.TAG, "doSaveFavorite ......")
 
         val allStockDetailsList = stockDetailLiveData.value?.data?.data
         if (allStockDetailsList.isNullOrEmpty()) {
@@ -174,7 +177,7 @@ class HomeViewModel @Inject constructor (val networkDataRepositoryUseCaseImpl: N
     // doAllUnFavorite is for dev for purpose
 
     fun doAllUnFavorite() {
-        Log.d(TAG, "doALlUnFavorite ......")
+        Log.d(Companion.TAG, "doALlUnFavorite ......")
         val allStockDetailsList = stockDetailLiveData.value?.data?.data
         if (allStockDetailsList.isNullOrEmpty()) {
             return
@@ -188,5 +191,7 @@ class HomeViewModel @Inject constructor (val networkDataRepositoryUseCaseImpl: N
     }
 
 
-    val TAG = "DashboardViewModel"
+    companion object {
+        val TAG = "HomeViewModel"
+    }
 }
