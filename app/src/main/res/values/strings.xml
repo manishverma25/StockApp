@@ -7,5 +7,6 @@
     <string name="no_internet_connection">No internet available</string>
     <string name="fetching_stock_details_api_error_msg">Error while getting stocks details</string>
     <string name="network_failure">Network Failure</string>
+    <string name="api_failure">Api Failure</string>
     <string name="sign_out">Sign Out</string>
 </resources>

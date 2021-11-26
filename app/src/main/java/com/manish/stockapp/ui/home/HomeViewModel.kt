@@ -1,10 +1,13 @@
 package com.manish.stockapp.ui.home
 
+import android.app.Application
+import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.explore.repos.demoapplication.CoroutineContextProvider
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -23,107 +26,75 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
-class HomeViewModel @Inject constructor (val networkDataRepositoryUseCaseImpl: DataRepositoryUseCase, val favoriteRepositoryImpl: FavoriteRepositoryUseCase) :
+class HomeViewModel @Inject constructor (
+     val networkDataRepositoryUseCaseImpl: DataRepositoryUseCase,
+                                         val favoriteRepositoryImpl: FavoriteRepositoryUseCase,
+                                         val coroutineContextProvider: CoroutineContextProvider
+) :
     ViewModel() {
 
 
     val stockDetailLiveData: MutableLiveData<Resource<StockDetailsApiResponse>> = MutableLiveData()
 
     val isNeedToResetSelectedItemListLiveData: MutableLiveData<Boolean> = MutableLiveData()
-    private val firebaseFirestore = FirebaseFirestore.getInstance()
-    private val wishlistStockCollectionRef = firebaseFirestore.collection(FIREBASE_COLLECTION_PATH)
+//    private val firebaseFirestore = FirebaseFirestore.getInstance()
+//    private val wishlistStockCollectionRef = firebaseFirestore.collection(FIREBASE_COLLECTION_PATH)
+
+    val ioContext: CoroutineContext = (coroutineContextProvider.IO)
 
 
     val alreadyWishListStockDetailsList = ArrayList<StockDetailsItem>()
 
     init {
-
-        Log.d(TAG, "HomeViewModel init 3333 ...  ")
         setIsNeedTpResetSelectedItemListLiveData(false)
-        getStocksDetails()
-        initStockListner()
-    }
-
-    private fun initStockListner() {
-        wishlistStockCollectionRef.addSnapshotListener(object : EventListener<QuerySnapshot> {
-            override fun onEvent(
-                queryDocumentSnapshots: QuerySnapshot?,
-                e: FirebaseFirestoreException?
-            ) {
-                if (e != null) {
-                    return
-                }
-                if (queryDocumentSnapshots == null) {
-                    Log.d(Companion.TAG, "No record foudn in firebase : ")
-                    return
-                }
-                alreadyWishListStockDetailsList.clear();
-                for (documentSnapshot in queryDocumentSnapshots) {
-                    val stockDetailsItem: StockDetailsItem =
-                        documentSnapshot.toObject(StockDetailsItem::class.java)
-//                    stockDetailsModel.setDocumentId(documentSnapshot.id)
-                    Log.d(Companion.TAG, "adding already stockDetailsModel : " + stockDetailsItem.sid)
-                    alreadyWishListStockDetailsList.add(stockDetailsItem)
-                }
-            }
-        })
+        initStockListener()
     }
 
 
 
-    private fun getStocksDetails() = viewModelScope.launch {
-//        Dispatchers.IO
+
+    private fun initStockListener() {
+        viewModelScope.launch(ioContext) {
+            FirebaseFirestore.getInstance().collection(FIREBASE_COLLECTION_PATH).addSnapshotListener(object : EventListener<QuerySnapshot> {
+                override fun onEvent(
+                    queryDocumentSnapshots: QuerySnapshot?,
+                    e: FirebaseFirestoreException?
+                ) {
+                    if (e != null) {
+                        return
+                    }
+                    if (queryDocumentSnapshots == null) {
+                        Log.d(Companion.TAG, "No record foudn in firebase : ")
+                        return
+                    }
+                    alreadyWishListStockDetailsList.clear();
+                    for (documentSnapshot in queryDocumentSnapshots) {
+                        val stockDetailsItem: StockDetailsItem =
+                            documentSnapshot.toObject(StockDetailsItem::class.java)
+                        Log.d(Companion.TAG, "adding already stockDetailsModel : " + stockDetailsItem.sid)
+                        alreadyWishListStockDetailsList.add(stockDetailsItem)
+                    }
+                }
+            })
+        }
+
+    }
+
+
+
+     fun getStocksData() = viewModelScope.launch (ioContext) {
         fetchStocksDetails()
     }
 
-    private suspend fun fetchStocksDetails() {
+    suspend fun fetchStocksDetails() {
         stockDetailLiveData.postValue(Resource.Loading())
-
-        try {
-            if (hasInternetConnection(StockApplication.appContext  )) {
-                val response = networkDataRepositoryUseCaseImpl.getStocksDetails()
-
-                val stocksDetailsResponse = handleStockDetailsResponse(response)
-//                saveStocksToFireStore(stocksDetailsResponse.data?.data)
-                stockDetailLiveData.postValue(stocksDetailsResponse)
-            } else {
-                stockDetailLiveData.postValue(
-                    Resource.Error(
-                        StockApplication.appContext.getString(
-                            R.string.no_internet_connection
-                        )
-                    )
-                )
-            }
-        } catch (t: Throwable) {
-            when (t) {
-                is IOException -> stockDetailLiveData.postValue(
-                    Resource.Error(
-                        StockApplication.appContext .getString(
-                            R.string.network_failure
-                        )
-                    )
-                )
-                else -> stockDetailLiveData.postValue(
-                    Resource.Error(
-                        StockApplication.appContext .getString(
-                            R.string.fetching_stock_details_api_error_msg
-                        )
-                    )
-                )
-            }
-        }
+        val response = networkDataRepositoryUseCaseImpl.getStocksDetails()
+        stockDetailLiveData.postValue(response)
     }
 
-    private fun handleStockDetailsResponse(response: Response<StockDetailsApiResponse>): Resource<StockDetailsApiResponse> {
-        if (response.isSuccessful) {
-            response.body()?.let { resultResponse ->
-                return Resource.Success(resultResponse)
-            }
-        }
-        return Resource.Error(response.message())
-    }
+
 
 
     fun doSaveFavorite() {

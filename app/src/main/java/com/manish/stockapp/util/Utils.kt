@@ -1,5 +1,6 @@
 package com.hadi.retrofitmvvm.util
 
+import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -10,7 +11,7 @@ import com.manish.stockapp.data.StockDetailsItem
 
 
 object Utils {
-    fun hasInternetConnection(application: StockApplication): Boolean {
+    fun hasInternetConnection(application: Application): Boolean {
         val connectivityManager = application.getSystemService(
             Context.CONNECTIVITY_SERVICE
         ) as ConnectivityManager

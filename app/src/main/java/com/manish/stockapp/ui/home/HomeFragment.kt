@@ -74,6 +74,7 @@ class HomeFragment : Fragment() {
 //            ViewModelProviderFactory(activity?.applicationContext as StockApplication,networkRepository, favoriteRepository)
 //        viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
         observerLiveData()
+        viewModel.getStocksData()
     }
 
 

@@ -48,6 +48,7 @@ class WishListFragment : Fragment() {
             .setQuery(query, StockDetailsItem::class.java)
             .build()
         adapter = WishListAdapter(options)
+        options.snapshots
         wishListRecyclerView.setHasFixedSize(true)
         wishListRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         wishListRecyclerView.adapter = adapter
