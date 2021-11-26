@@ -5,7 +5,8 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.manish.stockapp.R
-import com.manish.stockapp.ui.home.DashboardFragment
+import com.manish.stockapp.StockApplication
+import com.manish.stockapp.ui.home.HomeFragment
 import com.manish.stockapp.ui.wishlist.WishListFragment
 import com.manish.stockapp.ui.profile.ProfileFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -15,7 +16,13 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        injectDI()
         setupUI()
+    }
+
+    private fun injectDI() {
+
+        StockApplication.appComponent.inject(this)
     }
 
 
@@ -25,13 +32,13 @@ class MainActivity : BaseActivity() {
         bottomBar.setOnItemSelectedListener {
             Log.d("mvv", " pos  setOnItemSelectedListener " + it)
             when (it) {
-                0 -> openFragment(DashboardFragment. newInstance("", ""))
+                0 -> openFragment(HomeFragment. newInstance("", ""))
                 1 -> openFragment(WishListFragment. newInstance("", ""))
                 2 -> openFragment(ProfileFragment. newInstance("", ""))
             }
         }
 
-        openFragment(DashboardFragment. newInstance("", ""))
+        openFragment(HomeFragment. newInstance("", ""))
 
 //        bottomBar.itemActiveIndex = 0
 

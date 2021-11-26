@@ -3,6 +3,7 @@ package com.manish.stockapp.ui.home
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
@@ -13,14 +14,17 @@ import com.manish.stockapp.R
 import com.manish.stockapp.StockApplication
 import com.manish.stockapp.data.*
 import com.manish.stockapp.domain.DataRepositoryUseCase
+import com.manish.stockapp.domain.FavoriteRepositoryImpl
 import com.manish.stockapp.domain.FavoriteRepositoryUseCase
+import com.manish.stockapp.domain.NetworkDataRepositoryImpl
 import com.manish.stockapp.util.Constants.FIREBASE_COLLECTION_PATH
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
+import javax.inject.Inject
 
-class HomeViewModel(app: StockApplication, private val networkDataRepositoryUseCaseImpl: DataRepositoryUseCase, private val favoriteRepositoryImpl: FavoriteRepositoryUseCase) :
-    AndroidViewModel(app) {
+class HomeViewModel @Inject constructor (val networkDataRepositoryUseCaseImpl: NetworkDataRepositoryImpl, val favoriteRepositoryImpl: FavoriteRepositoryImpl) :
+    ViewModel() {
 
 
     val stockDetailLiveData: MutableLiveData<Resource<StockDetailsApiResponse>> = MutableLiveData()
@@ -28,6 +32,7 @@ class HomeViewModel(app: StockApplication, private val networkDataRepositoryUseC
     val isNeedToResetSelectedItemListLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val firebaseFirestore = FirebaseFirestore.getInstance()
     private val wishlistStockCollectionRef = firebaseFirestore.collection(FIREBASE_COLLECTION_PATH)
+
 
     val alreadyWishListStockDetailsList = ArrayList<StockDetailsItem>()
 
@@ -63,6 +68,8 @@ class HomeViewModel(app: StockApplication, private val networkDataRepositoryUseC
         })
     }
 
+
+
     private fun getStocksDetails() = viewModelScope.launch {
         fetchStocksDetails()
     }
@@ -71,7 +78,7 @@ class HomeViewModel(app: StockApplication, private val networkDataRepositoryUseC
         stockDetailLiveData.postValue(Resource.Loading())
 
         try {
-            if (hasInternetConnection(getApplication<StockApplication>())) {
+            if (hasInternetConnection(StockApplication.appContext  )) {
                 val response = networkDataRepositoryUseCaseImpl.getStocksDetails()
 
                 val stocksDetailsResponse = handleStockDetailsResponse(response)
@@ -80,7 +87,7 @@ class HomeViewModel(app: StockApplication, private val networkDataRepositoryUseC
             } else {
                 stockDetailLiveData.postValue(
                     Resource.Error(
-                        getApplication<StockApplication>().getString(
+                        StockApplication.appContext.getString(
                             R.string.no_internet_connection
                         )
                     )
@@ -90,14 +97,14 @@ class HomeViewModel(app: StockApplication, private val networkDataRepositoryUseC
             when (t) {
                 is IOException -> stockDetailLiveData.postValue(
                     Resource.Error(
-                        getApplication<StockApplication>().getString(
+                        StockApplication.appContext .getString(
                             R.string.network_failure
                         )
                     )
                 )
                 else -> stockDetailLiveData.postValue(
                     Resource.Error(
-                        getApplication<StockApplication>().getString(
+                        StockApplication.appContext .getString(
                             R.string.fetching_stock_details_api_error_msg
                         )
                     )

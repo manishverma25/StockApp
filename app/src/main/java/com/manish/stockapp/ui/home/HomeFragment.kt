@@ -10,24 +10,34 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hadi.retrofitmvvm.util.Utils
 import com.manish.stockapp.StockApplication
+import com.manish.stockapp.ViewModelFactory
 import com.manish.stockapp.domain.FavoriteRepositoryImpl
 import com.manish.stockapp.data.Resource
 import com.manish.stockapp.ViewModelProviderFactory
 import com.manish.stockapp.domain.NetworkDataRepositoryImpl
 import kotlinx.android.synthetic.main.fragment_home_layout.*
+import javax.inject.Inject
 
 
-class DashboardFragment : Fragment() {
-    private lateinit var viewModel: HomeViewModel
+class HomeFragment : Fragment() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel: HomeViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
+    }
+
+
     lateinit var stockDetailsAdapter: StockDetailsAdapter
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,10 +45,17 @@ class DashboardFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home_layout, container, false)
     }
 
+    private fun injectDI() {
+
+        StockApplication.appComponent.inject(this)
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        injectDI()
         init()
+
     }
 
 
@@ -53,15 +70,15 @@ class DashboardFragment : Fragment() {
     private fun setupViewModel() {
         val favoriteRepository = FavoriteRepositoryImpl()
         val networkRepository = NetworkDataRepositoryImpl()
-        val factory =
-            ViewModelProviderFactory(activity?.applicationContext as StockApplication,networkRepository, favoriteRepository)
-        viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
+//        val factory =
+//            ViewModelProviderFactory(activity?.applicationContext as StockApplication,networkRepository, favoriteRepository)
+//        viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
         observerLiveData()
     }
 
 
     private fun observerLiveData() {
-        Log.d(TAG, " called observerLiveData() .. ")
+        Log.d(TAG, " called observerLiveData() .2222. ")
         observerStockDetailLiveData()
         observeResetSelectedItemListLiveData()
 
@@ -163,8 +180,8 @@ class DashboardFragment : Fragment() {
 
 
     companion object {
-        fun newInstance(param1: String?, param2: String?): DashboardFragment {
-            val fragment = DashboardFragment()
+        fun newInstance(param1: String?, param2: String?): HomeFragment {
+            val fragment = HomeFragment()
             val args = Bundle()
             args.putString(ARG_PARAM1, param1)
             args.putString(ARG_PARAM2, param2)

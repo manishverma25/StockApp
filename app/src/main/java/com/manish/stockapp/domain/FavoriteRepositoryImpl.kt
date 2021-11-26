@@ -4,9 +4,10 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.manish.stockapp.data.StockDetailsItem
 import com.manish.stockapp.util.Constants.FIREBASE_COLLECTION_PATH
+import javax.inject.Inject
 
 
-class FavoriteRepositoryImpl : FavoriteRepositoryUseCase {
+class FavoriteRepositoryImpl  @Inject constructor (): FavoriteRepositoryUseCase {
 
 
     private val db = FirebaseFirestore.getInstance()
