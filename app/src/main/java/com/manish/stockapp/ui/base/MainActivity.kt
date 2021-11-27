@@ -13,7 +13,7 @@ import com.manish.stockapp.ui.home.HomeFragment
 import com.manish.stockapp.ui.login.LoginActivity
 import com.manish.stockapp.ui.wishlist.WishListFragment
 import com.manish.stockapp.ui.profile.ProfileFragment
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.main_activity.*
 
 
 class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("mvv", " onCreate 222 ")
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.main_activity)
         injectDI()
         setupBottomBar()
 

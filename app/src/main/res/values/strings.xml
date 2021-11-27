@@ -10,4 +10,5 @@
     <string name="api_failure">Api Failure</string>
     <string name="sign_out">Sign Out</string>
     <string name="login_via_firebase">Login via firebase</string>
+    <string name="stocks_live_tracking_api_hit">Stocks live tracking API Hit</string>
 </resources>

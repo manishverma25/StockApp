@@ -1,30 +1,34 @@
 package com.manish.stockapp.ui.wishlist
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.manish.stockapp.R
 
-import com.google.firebase.firestore.FirebaseFirestore
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 
-
-
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.firebase.firestore.Query
-import com.manish.stockapp.data.StockDetailsItem
-import com.manish.stockapp.util.Constants.FIREBASE_COLLECTION_PATH
-import com.manish.stockapp.util.Constants.KEY_FIELD_FOR_FAVORITE
-import kotlinx.android.synthetic.main.fragment_second.*
+import com.manish.stockapp.StockApplication
+import com.manish.stockapp.ViewModelFactory
+import com.manish.stockapp.util.extension.errorSnack
+import kotlinx.android.synthetic.main.wishlist_fragment.*
+import javax.inject.Inject
 
 
 class WishListFragment : Fragment() {
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
-    private val firebaseFirestore = FirebaseFirestore.getInstance()
-    private val wishlistStockCollectionRef = firebaseFirestore.collection(FIREBASE_COLLECTION_PATH)
+    private val wishListViewModel: WishListViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory).get(WishListViewModel::class.java)
+    }
+
+    lateinit var wishListStockAdapter: WishListRecyclerAdapter
 
     private var adapter: WishListAdapter? = null
 
@@ -32,26 +36,69 @@ class WishListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_second, container, false)
+        return inflater.inflate(R.layout.wishlist_fragment, container, false)
     }
 
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpRecyclerView();
+        injectDI()
+        init();
     }
 
-    private fun setUpRecyclerView() {
-        val query: Query = wishlistStockCollectionRef.whereEqualTo(KEY_FIELD_FOR_FAVORITE, false)
-        val options: FirestoreRecyclerOptions<StockDetailsItem> = FirestoreRecyclerOptions.Builder<StockDetailsItem>()
-            .setQuery(query, StockDetailsItem::class.java)
-            .build()
-        adapter = WishListAdapter(options)
-        options.snapshots
+    private fun init() {
         wishListRecyclerView.setHasFixedSize(true)
-        wishListRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        wishListRecyclerView.adapter = adapter
+        wishListRecyclerView.layoutManager = LinearLayoutManager(activity)
+        wishListStockAdapter = WishListRecyclerAdapter()
+
+        observerLiveData()
+        getFavoriteStockList()
+
+    }
+
+    private fun injectDI() {
+        StockApplication.appComponent.inject(this)
+    }
+
+
+    private fun getFavoriteStockList() {
+        wishListViewModel.getFavoriteStockListLiveData()
+
+    }
+
+    private fun observerLiveData() {
+        observerFavoriteStockListLiveData()
+        observerWishListErrorLiveData()
+    }
+
+    private fun observerFavoriteStockListLiveData() {
+
+        wishListViewModel.favoriteStockListLiveData.observe(requireActivity(),  { favoriteStockList ->
+
+            hideProgressBar()
+            Log.d(TAG, " favoriteStockList  ... $favoriteStockList ")
+            wishListStockAdapter.differ.submitList (favoriteStockList)
+            wishListRecyclerView.adapter = wishListStockAdapter
+        })
+
+    }
+
+    private fun observerWishListErrorLiveData() {
+
+        wishListViewModel.wishListSnapShotListenerErrorLiveData.observe(requireActivity(),  { wishListSnapSnopListenerError ->
+            hideProgressBar()
+            progress.errorSnack(wishListSnapSnopListenerError, Snackbar.LENGTH_LONG)
+        })
+
+    }
+
+    private fun hideProgressBar() {
+        progress.visibility = View.GONE
+    }
+
+    private fun showProgressBar() {
+        progress.visibility = View.VISIBLE
     }
 
 
@@ -67,12 +114,11 @@ class WishListFragment : Fragment() {
 
 
     companion object {
+        val TAG = "WishListFragment"
         fun newInstance(): WishListFragment {
             return WishListFragment()
         }
 
-        private val ARG_PARAM1 = "param1"
-        private val ARG_PARAM2 = "param2"
     }
 
 }

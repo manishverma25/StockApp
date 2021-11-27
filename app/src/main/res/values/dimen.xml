@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="item_margin">@dimen/_10sdp</dimen>
-    <dimen name="item_margin_small">@dimen/_5sdp</dimen>
+
 
     <dimen name="text_size_headline">@dimen/_30ssp</dimen>
     <dimen name="text_size_title">@dimen/_14ssp</dimen>
     <dimen name="text_size_sub_title">@dimen/_12ssp</dimen>
+
+
+    <dimen name="item_margin">@dimen/_10sdp</dimen>
+    <dimen name="item_margin_small">@dimen/_5sdp</dimen>
+    <dimen name="item_margin_large">@dimen/_10sdp</dimen>
 
 
 
