@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.explore.repos.demoapplication.CoroutineContextProvider
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.QuerySnapshot
+import com.manish.stockapp.data.Resource
 import com.manish.stockapp.data.StockDetailsItem
 import com.manish.stockapp.domain.FavoriteRepositoryUseCase
 import kotlinx.coroutines.launch
@@ -21,36 +22,67 @@ class WishListViewModel @Inject constructor (
 ) :
     ViewModel() {
 
-    val favoriteStockListLiveData : MutableLiveData<List<StockDetailsItem>> = MutableLiveData()
+//    val favoriteStockListLiveData : MutableLiveData<List<StockDetailsItem>> = MutableLiveData()
 
     val ioContext: CoroutineContext = (coroutineContextProvider.IO)
 
-    val wishListSnapShotListenerErrorLiveData : MutableLiveData<String> = MutableLiveData()
+//    val wishListSnapShotListenerErrorLiveData : MutableLiveData<String> = MutableLiveData()
 
+    private val _WishListViewModelStateLiveData: MutableLiveData<WishListViewModelState> = MutableLiveData()
 
-    fun getFavoriteStockListLiveData(): LiveData<List<StockDetailsItem>> {
-
-        viewModelScope.launch(ioContext) {
-            favoriteRepositoryImpl.getAllSavedStockCollection().addSnapshotListener(EventListener<QuerySnapshot> { value, e ->
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e)
-                    favoriteStockListLiveData.value = null
-                    wishListSnapShotListenerErrorLiveData.postValue(e.message)
-                    return@EventListener
-                }
-
-                var savedAddressList : MutableList<StockDetailsItem> = mutableListOf()
-                for (doc in value!!) {
-                    var stockDetailsItem = doc.toObject(StockDetailsItem::class.java)
-                    Log.w(TAG, "stockDetailsItem  :  $stockDetailsItem" )
-                    if(stockDetailsItem.isFavorite){
-                        savedAddressList.add(stockDetailsItem)
-                    }
-                }
-            favoriteStockListLiveData.postValue(savedAddressList)
-            })
+    val wishListViewModelStateLiveData: LiveData<WishListViewModelState>
+        get() {
+            return _WishListViewModelStateLiveData
         }
-        return favoriteStockListLiveData
+
+    fun getFavoriteStockListLiveData() { //LiveData<List<StockDetailsItem>>
+
+        var wishListViewModelState: WishListViewModelState
+        viewModelScope.launch(ioContext) {
+            favoriteRepositoryImpl.getAllSavedStockCollection()
+                .addSnapshotListener(EventListener<QuerySnapshot> { value, e ->
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e)
+//                    favoriteStockListLiveData.value = null
+//                    wishListSnapShotListenerErrorLiveData.postValue(e.message)
+                        wishListViewModelState =  transformToState(Resource.Error(e.message ?: ""))
+                        _WishListViewModelStateLiveData.postValue(wishListViewModelState)
+                        return@EventListener
+                    }
+
+                    var savedAddressList: MutableList<StockDetailsItem> = mutableListOf()
+                    for (doc in value!!) {
+                        var stockDetailsItem = doc.toObject(StockDetailsItem::class.java)
+                        Log.w(TAG, "stockDetailsItem  :  $stockDetailsItem")
+                        if (stockDetailsItem.isFavorite) {
+                            savedAddressList.add(stockDetailsItem)
+                        }
+                    }
+                    wishListViewModelState = transformToState(Resource.Success(savedAddressList))
+                    _WishListViewModelStateLiveData.postValue(wishListViewModelState)
+//            favoriteStockListLiveData.postValue(savedAddressList)
+                })
+        }
+//        return favoriteStockListLiveData
+    }
+
+    private fun transformToState(resource: Resource<List<StockDetailsItem>>?): WishListViewModelState {
+        return when(resource){
+            is Resource.Success -> {
+                WishListViewModelState.Success(resource.data as List<StockDetailsItem> )
+            }
+            is Resource.Error -> {
+                WishListViewModelState.Error(resource.message?:"")
+            }
+            is Resource.Loading -> {
+                WishListViewModelState.Loading
+            }
+            else -> WishListViewModelState.Loading
+        }
+
+
+
+
     }
 
     companion object {

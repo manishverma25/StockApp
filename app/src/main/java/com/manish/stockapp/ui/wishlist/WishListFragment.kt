@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.manish.stockapp.R
 
@@ -30,7 +31,7 @@ class WishListFragment : Fragment() {
 
     lateinit var wishListStockAdapter: WishListRecyclerAdapter
 
-    private var adapter: WishListAdapter? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,30 +69,57 @@ class WishListFragment : Fragment() {
     }
 
     private fun observerLiveData() {
-        observerFavoriteStockListLiveData()
-        observerWishListErrorLiveData()
+        observerWishListViewModelStateLiveData()
     }
 
-    private fun observerFavoriteStockListLiveData() {
+    private fun observerWishListViewModelStateLiveData() {
 
-        wishListViewModel.favoriteStockListLiveData.observe(requireActivity(),  { favoriteStockList ->
+        wishListViewModel.wishListViewModelStateLiveData.observe(
+            requireActivity(),
+            wishListViewModelStateObserver)
 
-            hideProgressBar()
-            Log.d(TAG, " favoriteStockList  ... $favoriteStockList ")
-            wishListStockAdapter.differ.submitList (favoriteStockList)
-            wishListRecyclerView.adapter = wishListStockAdapter
-        })
+    }
+    val wishListViewModelStateObserver = Observer<WishListViewModelState>(){
+                wishListViewModelState ->
+
+            Log.d(TAG, " wishListViewModelState  ... $wishListViewModelState ")
+            when (wishListViewModelState) {
+                WishListViewModelState.Loading -> {
+                    showProgressBar()
+                }
+                wishListViewModelState as WishListViewModelState.Success -> {
+                    hideProgressBar()
+                    Log.d(TAG, " wishListViewModelState.data   ... ${wishListViewModelState.data} ")
+                    wishListStockAdapter.differ.submitList(wishListViewModelState.data)
+                    wishListRecyclerView.adapter = wishListStockAdapter
+                }
+                wishListViewModelState as WishListViewModelState.Error -> {
+                    hideProgressBar()
+                    progress.errorSnack(
+                        wishListViewModelState.errorMessage,
+                        Snackbar.LENGTH_LONG
+                    )
+                }
+
+                else -> {
+
+                }
+            }
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d(TAG," onDestroyView")
+        wishListViewModel.wishListViewModelStateLiveData.removeObserver(wishListViewModelStateObserver)
 
     }
 
-    private fun observerWishListErrorLiveData() {
-
-        wishListViewModel.wishListSnapShotListenerErrorLiveData.observe(requireActivity(),  { wishListSnapSnopListenerError ->
-            hideProgressBar()
-            progress.errorSnack(wishListSnapSnopListenerError, Snackbar.LENGTH_LONG)
-        })
-
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG," onDestroy")
     }
+
 
     private fun hideProgressBar() {
         progress.visibility = View.GONE
@@ -101,16 +129,6 @@ class WishListFragment : Fragment() {
         progress.visibility = View.VISIBLE
     }
 
-
-    override fun onStart() {
-        super.onStart()
-        adapter?.startListening();
-    }
-
-    override fun onStop() {
-        super.onStop()
-        adapter?.stopListening();
-    }
 
 
     companion object {
