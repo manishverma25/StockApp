@@ -36,7 +36,7 @@ class HomeFragment : Fragment() {
 
     var periodicApiPollingRunnableTask :Runnable? = object: Runnable {
         override fun run() {
-            viewModel.getStocksData()
+            viewModel.fetchStockDetailsData()
             periodicApiPollingHandler.postDelayed(this, Constants.STOCK_DEATILS_API_PERIODIC_TIMER)
         }
     }
@@ -68,7 +68,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         injectDI()
         init()
-        viewModel.getStocksData()
+        viewModel.fetchStockDetailsData()
     }
 
     override fun onStart() {

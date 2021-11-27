@@ -27,17 +27,12 @@ class HomeViewModel @Inject constructor(
     val stockDetailsApiHitLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
 
 
-    fun getStocksData() = viewModelScope.launch(ioContext) {
+    fun fetchStockDetailsData() = viewModelScope.launch(ioContext) {
         stockDetailsApiHitLiveData.postValue(true)
-        fetchStocksDetails()
-    }
-
-    suspend fun fetchStocksDetails() {
         stockDetailLiveData.postValue(Resource.Loading())
         val response = networkDataRepositoryUseCaseImpl.getStocksDetails()
         stockDetailLiveData.postValue(response)
     }
-
 
     fun doFavorite() {
         Log.d(Companion.TAG, "doFavorite ......")

@@ -35,7 +35,7 @@ class WishListViewModel @Inject constructor (
             return _WishListViewModelStateLiveData
         }
 
-    fun getFavoriteStockListLiveData() { //LiveData<List<StockDetailsItem>>
+    fun fetchFavoriteStocksList() { //LiveData<List<StockDetailsItem>>
 
         var wishListViewModelState: WishListViewModelState
         viewModelScope.launch(ioContext) {

@@ -1,12 +1,7 @@
 package com.manish.stockapp.ui.home
 
-import android.app.Application
-import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.google.firebase.firestore.FirebaseFirestore
-import com.hadi.retrofitmvvm.util.Utils
-import com.manish.stockapp.StockApplication
 import com.manish.stockapp.TestCoroutineContextProvider
 import com.manish.stockapp.TestCoroutineRule
 import com.manish.stockapp.data.Resource
@@ -15,7 +10,6 @@ import com.manish.stockapp.data.StockDetailsItem
 import com.manish.stockapp.domain.DataRepositoryUseCase
 import com.manish.stockapp.domain.FavoriteRepositoryUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Assert.*
 import org.hamcrest.CoreMatchers
 import org.junit.Before
 import org.junit.Rule
@@ -25,8 +19,6 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.junit.Assert
 import org.mockito.MockitoAnnotations
-import retrofit2.Response
-import org.junit.rules.TestRule
 
 
 
@@ -49,11 +41,6 @@ class HomeViewModelTest{
 
     @Mock lateinit var networkDataRepositoryUseCaseImpl: DataRepositoryUseCase
     @Mock lateinit var favoriteRepositoryImpl: FavoriteRepositoryUseCase
-
-
-
-//    @Mock lateinit var appContext: Application
-//    @Mock lateinit var w: FavoriteRepositoryUseCase
 
     val mockedStockDetailsItem = StockDetailsItem(
         sid = "RELI",
@@ -91,15 +78,10 @@ class HomeViewModelTest{
 
         val mockedStockDetailsResponse  = StockDetailsApiResponse(true,  arrayListOf(  mockedStockDetailsItem ))
         testCoroutineRule.runBlockingTest {
-//            Mockito.`when`(Utils.hasInternetConnection(appContext)).thenReturn(
-//                true
-//            )
             Mockito.`when`(networkDataRepositoryUseCaseImpl.getStocksDetails()).thenReturn(
                 Resource.Success(mockedStockDetailsResponse)
             )
-
-
-            homeViewModel.getStocksData()  // or homeViewModel.fetchStocksDetails
+            homeViewModel.fetchStockDetailsData()
 
             val ac = ArgumentCaptor.forClass(Resource::class.java)
             Mockito.verify(stateObserver, Mockito.times(2)).onChanged(ac.capture() as Resource<StockDetailsApiResponse>?)
@@ -110,7 +92,7 @@ class HomeViewModelTest{
         }
     }
 
-    // success data from usecase, success state shud be triggered
+
     @Test
     fun getData_api_errorFromUseCase_loadingAndSuccessReturned() {
 
@@ -119,10 +101,11 @@ class HomeViewModelTest{
             Mockito.`when`(networkDataRepositoryUseCaseImpl.getStocksDetails()).thenReturn(
                 Resource.Error(apiErrorMsg)
             )
-            homeViewModel.getStocksData()
+            homeViewModel.fetchStockDetailsData()
 
             val ac = ArgumentCaptor.forClass(Resource::class.java)
-            Mockito.verify(stateObserver, Mockito.times(2)).onChanged(ac.capture() as Resource<StockDetailsApiResponse>?)
+            Mockito.verify(stateObserver, Mockito.times(2))
+                .onChanged(ac.capture() as Resource<StockDetailsApiResponse>?)
 
             Assert.assertThat(ac.allValues[0], CoreMatchers.instanceOf(Resource.Loading::class.java))
             Assert.assertThat(ac.allValues[1], CoreMatchers.instanceOf(Resource.Error::class.java))

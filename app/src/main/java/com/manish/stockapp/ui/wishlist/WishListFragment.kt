@@ -64,7 +64,7 @@ class WishListFragment : Fragment() {
 
 
     private fun getFavoriteStockList() {
-        wishListViewModel.getFavoriteStockListLiveData()
+        wishListViewModel.fetchFavoriteStocksList()
 
     }
 
