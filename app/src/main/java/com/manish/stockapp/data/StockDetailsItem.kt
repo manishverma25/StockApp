@@ -11,7 +11,6 @@ data class StockDetailsItem(var sid:String = "",
                             var volume:Long  = 0L,
                             var date:String = "",
                             var isFavorite :Boolean = false,
-                            var isSelected :Boolean = false
 )
 
 //need to add no arg constructor

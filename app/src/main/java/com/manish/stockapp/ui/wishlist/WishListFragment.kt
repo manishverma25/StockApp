@@ -29,7 +29,7 @@ class WishListFragment : Fragment() {
         ViewModelProvider(this, viewModelFactory).get(WishListViewModel::class.java)
     }
 
-    lateinit var wishListStockAdapter: WishListRecyclerAdapter
+    lateinit var wishListStockAdapter: WishListStockAdapter
 
 
 
@@ -51,7 +51,7 @@ class WishListFragment : Fragment() {
     private fun init() {
         wishListRecyclerView.setHasFixedSize(true)
         wishListRecyclerView.layoutManager = LinearLayoutManager(activity)
-        wishListStockAdapter = WishListRecyclerAdapter()
+        wishListStockAdapter = WishListStockAdapter()
 
         observerLiveData()
         getFavoriteStockList()

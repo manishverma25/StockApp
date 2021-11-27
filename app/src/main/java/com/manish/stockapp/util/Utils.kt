@@ -37,13 +37,4 @@ object Utils {
         return false
     }
 
-
-     fun resetSelectedStockList(currentList:List<StockDetailsItem>){
-
-         for (stockDetailsItem in currentList){
-             if(stockDetailsItem.isSelected){
-                 stockDetailsItem.isSelected = false
-             }
-         }
-     }
 }

@@ -72,12 +72,12 @@ class WishListViewModelTest{
 
         val mockedWishListFavorResponse  =  arrayListOf(  mockedStockDetailsItem )
         testCoroutineRule.runBlockingTest {
-            Mockito.`when`(favoriteRepositoryImpl.getAllSavedStockCollection()).thenReturn(
-                collectionReference
-            )
-            Mockito.`when`(collectionReference.addSnapshotListener(fireBaseEventListener)).thenReturn(
-                firebaseListenerRegistration
-            )
+//            Mockito.`when`(favoriteRepositoryImpl.getAllSavedStockCollection()).thenReturn(
+//                collectionReference
+//            )
+//            Mockito.`when`(collectionReference.addSnapshotListener(fireBaseEventListener)).thenReturn(
+//                firebaseListenerRegistration
+//            )
             wishListViewModel.fetchFavoriteStocksList()
 
 
@@ -99,7 +99,7 @@ class WishListViewModelTest{
 
         val mockedWishListFavorResponse = WishListViewModelState.Error("")
         testCoroutineRule.runBlockingTest {
-            Mockito.`when`(favoriteRepositoryImpl.getAllSavedStockCollection()).thenReturn(
+            Mockito.`when`(favoriteRepositoryImpl.getFavoriteStocksCollection()).thenReturn(
                 collectionReference
             )
             Mockito.`when`(collectionReference.addSnapshotListener(fireBaseEventListener)).thenReturn(

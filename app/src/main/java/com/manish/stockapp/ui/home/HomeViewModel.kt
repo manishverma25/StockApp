@@ -1,6 +1,6 @@
 package com.manish.stockapp.ui.home
 
-import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,11 +20,17 @@ class HomeViewModel @Inject constructor(
 
     val stockDetailLiveData: MutableLiveData<Resource<StockDetailsApiResponse>> = MutableLiveData()
 
-    val isNeedToResetSelectedItemListLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
 
     val ioContext: CoroutineContext = (coroutineContextProvider.IO)
 
     val stockDetailsApiHitLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    private val _favoriteStatusLiveData:  MutableLiveData<Resource<Any>> = MutableLiveData()
+
+    val favoriteStatusLiveData: LiveData<Resource<Any>>
+        get() {
+            return _favoriteStatusLiveData
+        }
 
 
     fun fetchStockDetailsData() = viewModelScope.launch(ioContext) {
@@ -34,36 +40,16 @@ class HomeViewModel @Inject constructor(
         stockDetailLiveData.postValue(response)
     }
 
-    fun doFavorite() {
-        Log.d(Companion.TAG, "doFavorite ......")
-        val allStockDetailsList = stockDetailLiveData.value?.data?.data
-        if (allStockDetailsList.isNullOrEmpty()) {
-            //todo update live data that  no stock found
-            return
+
+
+    fun doFavorite(stockDetailsItem: StockDetailsItem) {
+        viewModelScope.launch(ioContext) {
+            val favoriteResponse =    favoriteRepositoryImpl.doFavorite(stockDetailsItem)
+            _favoriteStatusLiveData.postValue(favoriteResponse)
         }
-        val selectedStockList = getSelectedStockList(allStockDetailsList)
-        favoriteRepositoryImpl.doFavorite(selectedStockList)
-        resetSelectedItemList()
     }
 
 
-    private fun resetSelectedItemList() {
-        isNeedToResetSelectedItemListLiveData.postValue(true)
-    }
-
-    fun getSelectedStockList(allStocksList: ArrayList<StockDetailsItem>): ArrayList<StockDetailsItem> {
-        val selectedStockList = ArrayList<StockDetailsItem>()
-        for (stockDetailsItem in allStocksList) {
-            if (stockDetailsItem.isSelected) {
-                selectedStockList.add(stockDetailsItem)
-            }
-        }
-        return selectedStockList
-    }
-
-    fun setIsNeedTpResetSelectedItemListLiveData(isNeedToReset: Boolean) {
-        isNeedToResetSelectedItemListLiveData.postValue(isNeedToReset)
-    }
 
 
     companion object {

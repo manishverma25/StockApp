@@ -8,10 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.explore.repos.demoapplication.CoroutineContextProvider
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.QuerySnapshot
+import com.manish.stockapp.data.FavoriteStockItem
 import com.manish.stockapp.data.Resource
 import com.manish.stockapp.data.StockDetailsItem
 import com.manish.stockapp.domain.FavoriteRepositoryUseCase
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -22,44 +24,47 @@ class WishListViewModel @Inject constructor (
 ) :
     ViewModel() {
 
-//    val favoriteStockListLiveData : MutableLiveData<List<StockDetailsItem>> = MutableLiveData()
 
     val ioContext: CoroutineContext = (coroutineContextProvider.IO)
 
-//    val wishListSnapShotListenerErrorLiveData : MutableLiveData<String> = MutableLiveData()
 
-    private val _WishListViewModelStateLiveData: MutableLiveData<WishListViewModelState> = MutableLiveData()
+    private val _wishListViewModelStateLiveData: MutableLiveData<WishListViewModelState> = MutableLiveData()
 
     val wishListViewModelStateLiveData: LiveData<WishListViewModelState>
         get() {
-            return _WishListViewModelStateLiveData
+            return _wishListViewModelStateLiveData
         }
 
     fun fetchFavoriteStocksList() { //LiveData<List<StockDetailsItem>>
 
         var wishListViewModelState: WishListViewModelState
         viewModelScope.launch(ioContext) {
-            favoriteRepositoryImpl.getAllSavedStockCollection()
+            favoriteRepositoryImpl.getFavoriteStocksCollection()
                 .addSnapshotListener(EventListener<QuerySnapshot> { value, e ->
                     if (e != null) {
                         Log.w(TAG, "Listen failed.", e)
 //                    favoriteStockListLiveData.value = null
 //                    wishListSnapShotListenerErrorLiveData.postValue(e.message)
                         wishListViewModelState =  transformToState(Resource.Error(e.message ?: ""))
-                        _WishListViewModelStateLiveData.postValue(wishListViewModelState)
+                        _wishListViewModelStateLiveData.postValue(wishListViewModelState)
                         return@EventListener
                     }
-
-                    var savedAddressList: MutableList<StockDetailsItem> = mutableListOf()
-                    for (doc in value!!) {
-                        var stockDetailsItem = doc.toObject(StockDetailsItem::class.java)
-                        Log.w(TAG, "stockDetailsItem  :  $stockDetailsItem")
-                        if (stockDetailsItem.isFavorite) {
-                            savedAddressList.add(stockDetailsItem)
+                    try {
+                        var savedAddressList: MutableList<StockDetailsItem> = mutableListOf()
+                        for (doc in value!!) {
+                            var favoriteStockItem = doc.toObject(FavoriteStockItem::class.java)
+                            Log.w(TAG, "stockDetailsItem  :  $favoriteStockItem")
+                            if (favoriteStockItem.isfavorite) {
+                                savedAddressList.add(StockDetailsItem(favoriteStockItem.sid))
+                            }
                         }
+                        wishListViewModelState = transformToState(Resource.Success(savedAddressList))
+                        _wishListViewModelStateLiveData.postValue(wishListViewModelState)
+                    }catch (e:Exception){
+                       e.printStackTrace()
                     }
-                    wishListViewModelState = transformToState(Resource.Success(savedAddressList))
-                    _WishListViewModelStateLiveData.postValue(wishListViewModelState)
+
+
 //            favoriteStockListLiveData.postValue(savedAddressList)
                 })
         }

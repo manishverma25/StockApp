@@ -12,17 +12,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.hadi.retrofitmvvm.util.Utils
 import com.manish.stockapp.StockApplication
 import com.manish.stockapp.ViewModelFactory
 import com.manish.stockapp.data.Resource
+import com.manish.stockapp.data.StockDetailsItem
 import com.manish.stockapp.util.Constants
 import com.manish.stockapp.util.extension.errorSnack
+import com.manish.stockapp.util.extension.showSnack
 import kotlinx.android.synthetic.main.home_fragment.*
 import javax.inject.Inject
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), StockDetailsAdapter.OnStockItemSelectListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -42,7 +43,7 @@ class HomeFragment : Fragment() {
     }
 
 
-    lateinit var stockDetailsListAdapter: StockDetailsAdapter
+     var stockDetailsListAdapter: StockDetailsAdapter? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,25 +69,21 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         injectDI()
         init()
-        viewModel.fetchStockDetailsData()
     }
 
     override fun onStart() {
         super.onStart()
         /**
-         * Start the api call periodically after 5 sec
+         * Start the api call periodically
          */
-//       startPerodicAPiCall()  //stop perodic call having bug
-
-
-
+       startPerodicAPiCall()  //stop perodic call having bug
     }
 
     override fun onStop() {
         super.onStop()
 
         /**
-         * Stop  the api call periodically after 5 sec
+         * Stop  the api call periodically
          */
         stopPerodicApiCall()
     }
@@ -96,9 +93,6 @@ class HomeFragment : Fragment() {
         periodicApiPollingRunnableTask?.let {
             periodicApiPollingHandler.post(it)
         }
-//        executorService.scheduleAtFixedRate({
-//            viewModel.getStocksData()
-//        }, 1, 2, TimeUnit.SECONDS)
     }
 
 
@@ -114,9 +108,13 @@ class HomeFragment : Fragment() {
     private fun init() {
         stockDeatilsRecyclerView.setHasFixedSize(true)
         stockDeatilsRecyclerView.layoutManager = LinearLayoutManager(activity)
-        stockDetailsListAdapter = StockDetailsAdapter()
+        stockDetailsListAdapter = StockDetailsAdapter(this)
         setupViewModel()
 
+    }
+
+    override fun onStockItemSelectListener(stockDetailItem: StockDetailsItem) {
+        viewModel.doFavorite(stockDetailItem)
     }
 
 
@@ -129,9 +127,33 @@ class HomeFragment : Fragment() {
     private fun observerLiveData() {
         Log.d(TAG, " called observerLiveData() .2222. ")
         observerStockDetailLiveData()
-        observeResetSelectedItemListLiveData()
         observeStockDetailsApiHitLiveData()
+        observerFavoriteStatusLiveData()
 
+    }
+
+    private fun observerFavoriteStatusLiveData() {
+
+        viewModel.favoriteStatusLiveData.observe(requireActivity(), Observer { response ->
+            when (response) {
+                is Resource.Success -> {
+                    hideProgressBar()
+                    Log.d(TAG, " favoriteStatusLiveData Success  ")
+                    progress. showSnack(getString(R.string.stock_favorite_success_msg),Snackbar.LENGTH_LONG)
+                }
+                is Resource.Error -> {
+                    hideProgressBar()
+                    response.message?.let { message ->
+                        Log.d(TAG, " favoriteStatusLiveData message $message")
+                        progress.errorSnack(getString(R.string.stock_favorite_error_msg), Snackbar.LENGTH_LONG)
+                    }
+                }
+
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+            }
+        })
     }
 
     private fun observerStockDetailLiveData(){
@@ -141,7 +163,7 @@ class HomeFragment : Fragment() {
                     hideProgressBar()
                     response.data?.let { stockDetailsResponse ->
                         Log.d(TAG, " stockDetailsResponsessage data  :  ${stockDetailsResponse.data}")
-                        stockDetailsListAdapter.differ.submitList(stockDetailsResponse.data)
+                        stockDetailsListAdapter?.differ?.submitList(stockDetailsResponse.data)
                         stockDeatilsRecyclerView.adapter = stockDetailsListAdapter
                     }
                 }
@@ -160,22 +182,8 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private fun observeResetSelectedItemListLiveData(){
-        viewModel.isNeedToResetSelectedItemListLiveData.observe(requireActivity(), Observer { isNeedToReset ->
-
-            if(isNeedToReset){
-                Utils.resetSelectedStockList(stockDetailsListAdapter.differ.currentList)
-                stockDetailsListAdapter.notifyDataSetChanged()
-                viewModel.setIsNeedTpResetSelectedItemListLiveData(false)
-            }
-        })
-    }
-
-
-
     private fun observeStockDetailsApiHitLiveData(){
         viewModel.stockDetailsApiHitLiveData.observe(requireActivity(), Observer { isApiHit ->
-
             Log.d(TAG, " observeStockDetailsApiHitLiveData ... $isApiHit   . ")
             if(isApiHit){
                 Toast.makeText(requireContext(),getString(R.string.stocks_live_tracking_api_hit),Toast.LENGTH_SHORT).show()
@@ -183,33 +191,6 @@ class HomeFragment : Fragment() {
         })
     }
 
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_main, menu);
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_favorite -> {
-                doFavorite()
-            }
-
-            R.id.menu_delete_favorite -> {
-
-            }
-
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun doFavorite(){
-        viewModel.doFavorite()
-    }
 
     private fun hideProgressBar() {
         progress.visibility = View.GONE
@@ -223,6 +204,8 @@ class HomeFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         periodicApiPollingRunnableTask = null
+        stockDetailsListAdapter?.onStockItemSelectListener = null
+        stockDetailsListAdapter = null
     }
 
 

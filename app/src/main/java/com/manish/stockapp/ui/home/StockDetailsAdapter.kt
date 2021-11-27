@@ -11,7 +11,7 @@ import com.manish.stockapp.data.StockDetailsItem
 import kotlinx.android.synthetic.main.layout_stock_details_item.view.*
 
 
-class StockDetailsAdapter : RecyclerView.Adapter<StockDetailsAdapter.StockDetailsViewHolder>() {
+class StockDetailsAdapter (var onStockItemSelectListener :OnStockItemSelectListener?) : RecyclerView.Adapter<StockDetailsAdapter.StockDetailsViewHolder>() {
 
     inner class StockDetailsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
@@ -24,6 +24,7 @@ class StockDetailsAdapter : RecyclerView.Adapter<StockDetailsAdapter.StockDetail
             return oldItem == newItem
         }
     }
+
 
     val differ = AsyncListDiffer(this, differCallback)
 
@@ -51,10 +52,18 @@ class StockDetailsAdapter : RecyclerView.Adapter<StockDetailsAdapter.StockDetail
 
         holder.itemView.stockItemCheckBox.visibility = View.VISIBLE
         holder.itemView.stockItemCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            stockDetailItem.isSelected = isChecked
+            onStockItemSelectListener?.onStockItemSelectListener(stockDetailItem)
         }
 
-        holder.itemView.stockItemCheckBox.isChecked = stockDetailItem.isSelected
 
+
+        holder.itemView.setOnClickListener(View.OnClickListener {  })
     }
+
+     interface OnStockItemSelectListener {
+
+        fun onStockItemSelectListener(stockDetailItem :StockDetailsItem)
+    }
+
+
 }

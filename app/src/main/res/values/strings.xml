@@ -11,4 +11,6 @@
     <string name="sign_out">Sign Out</string>
     <string name="login_via_firebase">Login via firebase</string>
     <string name="stocks_live_tracking_api_hit">Stocks live tracking API Hit</string>
+    <string name="stock_favorite_success_msg">Saved in Favorite Successfully</string>
+    <string name="stock_favorite_error_msg">Try Later,stock could not saved in Favorite Successfully</string>
 </resources>

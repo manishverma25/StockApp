@@ -11,7 +11,7 @@ import com.manish.stockapp.data.StockDetailsItem
 import kotlinx.android.synthetic.main.layout_stock_details_item.view.*
 
 
-class WishListRecyclerAdapter : RecyclerView.Adapter<WishListRecyclerAdapter.StockDetailsViewHolder>() {
+class WishListStockAdapter : RecyclerView.Adapter<WishListStockAdapter.StockDetailsViewHolder>() {
 
     inner class StockDetailsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
@@ -40,7 +40,7 @@ class WishListRecyclerAdapter : RecyclerView.Adapter<WishListRecyclerAdapter.Sto
         val stockDetailItem = differ.currentList[position]
         holder.itemView.apply {
             stockNameTxt.text = stockDetailItem.sid
-            priceTxt.text = stockDetailItem.price.toString()
+//            priceTxt.text = stockDetailItem.price.toString()
         }
 
 
