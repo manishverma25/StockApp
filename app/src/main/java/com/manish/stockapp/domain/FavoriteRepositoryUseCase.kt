@@ -6,7 +6,7 @@ import com.manish.stockapp.data.Resource
 import com.manish.stockapp.data.StockDetailsItem
 
 interface FavoriteRepositoryUseCase { //rename it forebase rep[sositiry
-    fun doFavorite(stockDetailItem: StockDetailsItem) : Resource<Any>
+    fun doFavorite(stockDetailItem: StockDetailsItem) : Resource<String>
 
-    fun getFavoriteStocksCollection(): CollectionReference
+    fun getFavoriteStocksCollection(): Resource<List<StockDetailsItem>>?
 }

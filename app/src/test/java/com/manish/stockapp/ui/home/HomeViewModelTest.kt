@@ -39,8 +39,13 @@ class HomeViewModelTest{
     @Mock
     lateinit var stateObserver: Observer<Resource<StockDetailsApiResponse>>
 
+    @Mock
+    lateinit var favoriteStatusObserver: Observer<Resource<String>>
+
     @Mock lateinit var networkDataRepositoryUseCaseImpl: DataRepositoryUseCase
     @Mock lateinit var favoriteRepositoryImpl: FavoriteRepositoryUseCase
+
+    val apiErrorMsg =  "Internal server error 500"
 
     val mockedStockDetailsItem = StockDetailsItem(
         sid = "RELI",
@@ -63,7 +68,8 @@ class HomeViewModelTest{
 //        val f = FirebaseFirestore.getInstance()
 //        Log.d("mvv","FirebaseFirestore  .... "+appContext)
         homeViewModel = HomeViewModel(networkDataRepositoryUseCaseImpl,favoriteRepositoryImpl, TestCoroutineContextProvider())
-        homeViewModel.stockDetailLiveData.observeForever(stateObserver)
+        homeViewModel.stocksDetailApiStatusLiveData.observeForever(stateObserver)
+        homeViewModel.favoriteStatusLiveData.observeForever(favoriteStatusObserver)
     }
 
     // error returnded from use case, error state shud be retrurned
@@ -74,7 +80,7 @@ class HomeViewModelTest{
 
     // success data from usecase, success state shud be triggered
     @Test
-    fun getData_successFromUseCase_loadingAndSuccessReturned() {
+    fun `fetchStockDetails api Data success `() {
 
         val mockedStockDetailsResponse  = StockDetailsApiResponse(true,  arrayListOf(  mockedStockDetailsItem ))
         testCoroutineRule.runBlockingTest {
@@ -94,9 +100,9 @@ class HomeViewModelTest{
 
 
     @Test
-    fun getData_api_errorFromUseCase_loadingAndSuccessReturned() {
+    fun `fetchStockDetails api fail`() {
 
-       val apiErrorMsg =  "Internal server error 500"
+
         testCoroutineRule.runBlockingTest {
             Mockito.`when`(networkDataRepositoryUseCaseImpl.getStocksDetails()).thenReturn(
                 Resource.Error(apiErrorMsg)
@@ -110,6 +116,49 @@ class HomeViewModelTest{
             Assert.assertThat(ac.allValues[0], CoreMatchers.instanceOf(Resource.Loading::class.java))
             Assert.assertThat(ac.allValues[1], CoreMatchers.instanceOf(Resource.Error::class.java))
             Assert.assertThat(ac.allValues[1].message, CoreMatchers.equalTo(apiErrorMsg))
+        }
+    }
+
+
+    @Test
+    fun `do favorite stock successfully done ` () {
+
+        val mockedFavoriteResponse  = Resource.Success("")
+        testCoroutineRule.runBlockingTest {
+            Mockito.`when`( favoriteRepositoryImpl.doFavorite(mockedStockDetailsItem)).thenReturn(
+                Resource.Success("")
+            )
+            homeViewModel.doFavorite(mockedStockDetailsItem)
+
+            val ac = ArgumentCaptor.forClass(Resource::class.java)
+            Mockito.verify(favoriteStatusObserver, Mockito.times(2))
+                .onChanged(ac.capture() as Resource<String>?)
+
+            Assert.assertThat(ac.allValues[0], CoreMatchers.instanceOf(Resource.Loading::class.java))
+            Assert.assertThat(ac.allValues[1], CoreMatchers.instanceOf(Resource.Success::class.java))
+            Assert.assertThat(ac.allValues[1].data, CoreMatchers.equalTo(mockedFavoriteResponse))
+        }
+    }
+
+
+
+    @Test
+    fun `do favorite stock get failed ` () {
+
+        val mockedFavoriteResponse  = Resource.Error(  apiErrorMsg,null)
+        testCoroutineRule.runBlockingTest {
+            Mockito.`when`( favoriteRepositoryImpl.doFavorite(mockedStockDetailsItem)).thenReturn(
+                Resource.Error(  apiErrorMsg,String())
+            )
+            homeViewModel.doFavorite(mockedStockDetailsItem)
+
+            val ac = ArgumentCaptor.forClass(Resource::class.java)
+            Mockito.verify(favoriteStatusObserver, Mockito.times(2))
+                .onChanged(ac.capture() as Resource<String>?)
+
+            Assert.assertThat(ac.allValues[0], CoreMatchers.instanceOf(Resource.Loading::class.java))
+            Assert.assertThat(ac.allValues[1], CoreMatchers.instanceOf(Resource.Error::class.java))
+            Assert.assertThat(ac.allValues[1].data, CoreMatchers.equalTo(apiErrorMsg))
         }
     }
 }

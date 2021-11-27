@@ -37,38 +37,10 @@ class WishListViewModel @Inject constructor (
 
     fun fetchFavoriteStocksList() { //LiveData<List<StockDetailsItem>>
 
-        var wishListViewModelState: WishListViewModelState
         viewModelScope.launch(ioContext) {
-            favoriteRepositoryImpl.getFavoriteStocksCollection()
-                .addSnapshotListener(EventListener<QuerySnapshot> { value, e ->
-                    if (e != null) {
-                        Log.w(TAG, "Listen failed.", e)
-//                    favoriteStockListLiveData.value = null
-//                    wishListSnapShotListenerErrorLiveData.postValue(e.message)
-                        wishListViewModelState =  transformToState(Resource.Error(e.message ?: ""))
-                        _wishListViewModelStateLiveData.postValue(wishListViewModelState)
-                        return@EventListener
-                    }
-                    try {
-                        var savedAddressList: MutableList<StockDetailsItem> = mutableListOf()
-                        for (doc in value!!) {
-                            var favoriteStockItem = doc.toObject(FavoriteStockItem::class.java)
-                            Log.w(TAG, "stockDetailsItem  :  $favoriteStockItem")
-                            if (favoriteStockItem.isfavorite) {
-                                savedAddressList.add(StockDetailsItem(favoriteStockItem.sid))
-                            }
-                        }
-                        wishListViewModelState = transformToState(Resource.Success(savedAddressList))
-                        _wishListViewModelStateLiveData.postValue(wishListViewModelState)
-                    }catch (e:Exception){
-                       e.printStackTrace()
-                    }
-
-
-//            favoriteStockListLiveData.postValue(savedAddressList)
-                })
+            val favoriteListResponse = favoriteRepositoryImpl.getFavoriteStocksCollection()
+            _wishListViewModelStateLiveData.postValue(transformToState(favoriteListResponse))
         }
-//        return favoriteStockListLiveData
     }
 
     private fun transformToState(resource: Resource<List<StockDetailsItem>>?): WishListViewModelState {
@@ -84,10 +56,6 @@ class WishListViewModel @Inject constructor (
             }
             else -> WishListViewModelState.Loading
         }
-
-
-
-
     }
 
     companion object {

@@ -40,13 +40,6 @@ class WishListViewModelTest{
 
     @Mock lateinit var favoriteRepositoryImpl: FavoriteRepositoryUseCase
 
-    @Mock lateinit var collectionReference : CollectionReference
-
-    @Mock lateinit var fireBaseEventListener : EventListener<QuerySnapshot>
-
-    @Mock lateinit var  firebaseListenerRegistration : ListenerRegistration
-
-
     val mockedStockDetailsItem = StockDetailsItem(
         sid = "RELI",
         price = 2485.25F,
@@ -58,6 +51,7 @@ class WishListViewModelTest{
         date = "2021-11-25T08:48:12.000Z"
 
     )
+    val apiErrorMsg =  "Internal server error 500"
 
     @Before
     fun setUp() {
@@ -72,16 +66,10 @@ class WishListViewModelTest{
 
         val mockedWishListFavorResponse  =  arrayListOf(  mockedStockDetailsItem )
         testCoroutineRule.runBlockingTest {
-//            Mockito.`when`(favoriteRepositoryImpl.getAllSavedStockCollection()).thenReturn(
-//                collectionReference
-//            )
-//            Mockito.`when`(collectionReference.addSnapshotListener(fireBaseEventListener)).thenReturn(
-//                firebaseListenerRegistration
-//            )
+            Mockito.`when`(favoriteRepositoryImpl.getFavoriteStocksCollection()).thenReturn(
+                Resource.Success(mockedWishListFavorResponse)
+            )
             wishListViewModel.fetchFavoriteStocksList()
-
-
-            wishListViewModel.fetchFavoriteStocksList()  // or homeViewModel.fetchStocksDetails
 
             val ac = ArgumentCaptor.forClass(Resource::class.java)
             Mockito.verify(WishListViewModelStateObserver, Mockito.times(2))
@@ -100,10 +88,7 @@ class WishListViewModelTest{
         val mockedWishListFavorResponse = WishListViewModelState.Error("")
         testCoroutineRule.runBlockingTest {
             Mockito.`when`(favoriteRepositoryImpl.getFavoriteStocksCollection()).thenReturn(
-                collectionReference
-            )
-            Mockito.`when`(collectionReference.addSnapshotListener(fireBaseEventListener)).thenReturn(
-                firebaseListenerRegistration
+                Resource.Error(apiErrorMsg)
             )
             wishListViewModel.fetchFavoriteStocksList()  // or homeViewModel.fetchStocksDetails
 

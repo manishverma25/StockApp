@@ -157,7 +157,7 @@ class HomeFragment : Fragment(), StockDetailsAdapter.OnStockItemSelectListener {
     }
 
     private fun observerStockDetailLiveData(){
-        viewModel.stockDetailLiveData.observe(requireActivity(), Observer { response ->
+        viewModel.stocksDetailApiStatusLiveData.observe(requireActivity(), Observer { response ->
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
