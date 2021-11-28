@@ -46,8 +46,8 @@ class FavoriteRepository  @Inject constructor (): FavoriteRepositoryDataSource {
     }
 
 
-    override fun getFavoriteStocksCollection(): Resource<List<StockDetailsItem>>? {
-        val favoriteResponse : Resource<List<StockDetailsItem>>? =   Resource.Error(message = "",null)
+    override fun getFavoriteStocksCollection(): Resource<List<FavoriteStockDetails>>? {
+        val favoriteResponse : Resource<List<FavoriteStockDetails>>? =   Resource.Error(message = "",null)
         val email = FirebaseAuth.getInstance().currentUser?.email
         if(email.isNullOrEmpty()){
             return  Resource.Error(FIREBASE_USER_DETAILS_NOT_FOUND)
@@ -56,19 +56,19 @@ class FavoriteRepository  @Inject constructor (): FavoriteRepositoryDataSource {
         val task = collectionReference.get()
         Tasks.await(task)
         /***
-         * Refered this use task   Tasks.await(task) , and remove snapshotLisnte
+         * Referred this blog use task   Tasks.await(task) , and remove snapshotLisnte
          * https://medium.com/firebase-tips-tricks/how-to-read-data-from-cloud-firestore-using-get-bf03b6ee4953
          */
         if (task.isSuccessful){
             val querySnapshot =  task.result
-            val savedAddressList: MutableList<StockDetailsItem> = mutableListOf()
+            val savedAddressList: MutableList<FavoriteStockDetails> = mutableListOf()
             if(!querySnapshot?.documents.isNullOrEmpty() ){
 
                 for (doc in querySnapshot?.documents!!.iterator()) {
                         val favoriteStockItem = doc.toObject(FavoriteStockDetails::class.java)
-                        Log.w(TAG, "stockDetailsItem  :::: :  $favoriteStockItem")
+                        Log.d(TAG, "stockDetailsItem  :::: :  $favoriteStockItem")
                         if (favoriteStockItem?.isfavorite == true) {
-                            savedAddressList.add(StockDetailsItem(favoriteStockItem.sid))
+                            savedAddressList.add(favoriteStockItem)
                         }
                     }
 

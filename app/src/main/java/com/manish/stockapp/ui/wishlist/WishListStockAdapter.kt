@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.manish.stockapp.R
-import com.manish.stockapp.data.StockDetailsItem
+import com.manish.stockapp.data.FavoriteStockDetails
 import kotlinx.android.synthetic.main.layout_stock_details_item.view.*
 
 
@@ -15,12 +15,12 @@ class WishListStockAdapter : RecyclerView.Adapter<WishListStockAdapter.StockDeta
 
     inner class StockDetailsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
-    private val differCallback = object : DiffUtil.ItemCallback<StockDetailsItem>() {
-        override fun areItemsTheSame(oldItem: StockDetailsItem, newItem: StockDetailsItem): Boolean {
+    private val differCallback = object : DiffUtil.ItemCallback<FavoriteStockDetails>() {
+        override fun areItemsTheSame(oldItem: FavoriteStockDetails, newItem: FavoriteStockDetails): Boolean {
             return oldItem.sid == newItem.sid
         }
 
-        override fun areContentsTheSame(oldItem: StockDetailsItem, newItem: StockDetailsItem): Boolean {
+        override fun areContentsTheSame(oldItem: FavoriteStockDetails, newItem: FavoriteStockDetails): Boolean {
             return oldItem == newItem
         }
     }
@@ -40,7 +40,6 @@ class WishListStockAdapter : RecyclerView.Adapter<WishListStockAdapter.StockDeta
         val stockDetailItem = differ.currentList[position]
         holder.itemView.apply {
             stockNameTxt.text = stockDetailItem.sid
-//            priceTxt.text = stockDetailItem.price.toString()
         }
 
 

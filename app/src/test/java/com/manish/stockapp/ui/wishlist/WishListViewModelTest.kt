@@ -4,8 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.manish.stockapp.TestCoroutineContextProvider
 import com.manish.stockapp.TestCoroutineRule
+import com.manish.stockapp.data.FavoriteStockDetails
 import com.manish.stockapp.data.Resource
-import com.manish.stockapp.data.StockDetailsItem
 import com.manish.stockapp.data.repository.FavoriteRepositoryDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.CoreMatchers
@@ -36,16 +36,9 @@ class WishListViewModelTest{
 
     @Mock lateinit var favoriteRepositoryImpl: FavoriteRepositoryDataSource
 
-    val mockedStockDetailsItem = StockDetailsItem(
+    val mockedFavoriteStockDetails = FavoriteStockDetails(
         sid = "RELI",
-        price = 2485.25F,
-        close = 12F,
-        change= 133.85F,
-        high =  2496F,
-        low = 2357.15F,
-        volume = 16425378,
-        date = "2021-11-25T08:48:12.000Z"
-
+        isfavorite = true
     )
     val apiErrorMsg =  "Internal server error 500"
 
@@ -59,7 +52,7 @@ class WishListViewModelTest{
     @Test
     fun  `get favorite stock list success`() {
 
-        val mockedFavvoriteStockList  =  arrayListOf(  mockedStockDetailsItem )
+        val mockedFavvoriteStockList  =  arrayListOf(  mockedFavoriteStockDetails )
         testCoroutineRule.runBlockingTest {
             Mockito.`when`(favoriteRepositoryImpl.getFavoriteStocksCollection()).thenReturn(
                 Resource.Success(mockedFavvoriteStockList)

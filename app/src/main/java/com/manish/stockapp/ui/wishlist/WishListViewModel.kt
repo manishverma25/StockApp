@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.explore.repos.demoapplication.CoroutineContextProvider
+import com.manish.stockapp.data.FavoriteStockDetails
 import com.manish.stockapp.data.Resource
 import com.manish.stockapp.data.StockDetailsItem
 import com.manish.stockapp.data.repository.FavoriteRepositoryDataSource
@@ -39,10 +40,10 @@ class WishListViewModel @Inject constructor (
         }
     }
 
-    private fun transformToState(resource: Resource<List<StockDetailsItem>>?): WishListViewModelState {
+    private fun transformToState(resource: Resource<List<FavoriteStockDetails>>?): WishListViewModelState {
         return when(resource){
             is Resource.Success -> {
-                WishListViewModelState.Success(resource.data as List<StockDetailsItem> )
+                WishListViewModelState.Success(resource.data as List<FavoriteStockDetails> )
             }
             is Resource.Error -> {
                 WishListViewModelState.Error(resource.message?:"")
@@ -62,7 +63,7 @@ class WishListViewModel @Inject constructor (
 
 sealed class WishListViewModelState{
     object Loading: WishListViewModelState()
-    data class Success(val data: List<StockDetailsItem>): WishListViewModelState()
+    data class Success(val data: List<FavoriteStockDetails>): WishListViewModelState()
     data class Error(val errorMessage: String): WishListViewModelState()
 
 }
