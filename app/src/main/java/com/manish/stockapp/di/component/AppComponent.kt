@@ -8,6 +8,7 @@ import com.manish.stockapp.di.module.NetworkModule
 import com.manish.stockapp.di.module.ViewModelModule
 import com.manish.stockapp.ui.base.MainActivity
 import com.manish.stockapp.ui.home.HomeFragment
+import com.manish.stockapp.ui.profile.ProfileFragment
 import com.manish.stockapp.ui.wishlist.WishListFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -35,5 +36,6 @@ interface AppComponent {
     fun inject(mainActivity: MainActivity)
     fun inject(homeFragment: HomeFragment)
     fun inject(mainActivity: WishListFragment)
+    fun inject(mainActivity: ProfileFragment)
 
 }

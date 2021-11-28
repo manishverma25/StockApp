@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.manish.stockapp.ViewModelFactory
 import com.manish.stockapp.ui.home.HomeViewModel
+import com.manish.stockapp.ui.profile.ProfileViewModel
 import com.manish.stockapp.ui.wishlist.WishListViewModel
 import dagger.Binds
 import dagger.MapKey
@@ -37,5 +38,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(WishListViewModel::class)
     abstract fun bindWishListViewModel(viewModel: WishListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ProfileViewModel::class)
+    abstract fun bindProfileViewModel(viewModel: ProfileViewModel): ViewModel
 
 }

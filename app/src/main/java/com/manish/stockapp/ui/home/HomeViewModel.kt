@@ -18,14 +18,19 @@ class HomeViewModel @Inject constructor(
     val coroutineContextProvider: CoroutineContextProvider
 ) : ViewModel() {
 
-    val stocksDetailApiStatusLiveData: MutableLiveData<Resource<StockDetailsApiResponse>> = MutableLiveData()
+
+    private val _stocksDetailApiStatusLiveData: MutableLiveData<Resource<StockDetailsApiResponse>> =
+        MutableLiveData()
+    val stocksDetailApiStatusLiveData: LiveData<Resource<StockDetailsApiResponse>> =
+        _stocksDetailApiStatusLiveData
 
 
-    val ioContext: CoroutineContext = (coroutineContextProvider.IO)
+    private val ioContext: CoroutineContext = (coroutineContextProvider.IO)
 
-    val stockDetailsApiHitLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _stockDetailsApiHitLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
+    val stockDetailsApiHitLiveData: LiveData<Boolean> = _stockDetailsApiHitLiveData
 
-    private val _favoriteStatusLiveData:  MutableLiveData<Resource<String>> = MutableLiveData()
+    private val _favoriteStatusLiveData: MutableLiveData<Resource<String>> = MutableLiveData()
 
     val favoriteStatusLiveData: LiveData<Resource<String>>
         get() {
@@ -34,10 +39,10 @@ class HomeViewModel @Inject constructor(
 
 
     fun fetchStockDetailsData() = viewModelScope.launch(ioContext) {
-        stockDetailsApiHitLiveData.postValue(true)
-        stocksDetailApiStatusLiveData.postValue(Resource.Loading())
+        _stockDetailsApiHitLiveData.postValue(true)
+        _stocksDetailApiStatusLiveData.postValue(Resource.Loading())
         val response = networkDataRepositoryUseCaseImpl.getStocksDetails()
-        stocksDetailApiStatusLiveData.postValue(response)
+        _stocksDetailApiStatusLiveData.postValue(response)
     }
 
 

@@ -68,7 +68,7 @@ class HomeViewModelTest{
 //        val f = FirebaseFirestore.getInstance()
 //        Log.d("mvv","FirebaseFirestore  .... "+appContext)
         homeViewModel = HomeViewModel(networkDataRepositoryUseCaseImpl,favoriteRepositoryImpl, TestCoroutineContextProvider())
-        homeViewModel.stocksDetailApiStatusLiveData.observeForever(stateObserver)
+        homeViewModel.stocksDetailApiStatusLiveData1.observeForever(stateObserver)
         homeViewModel.favoriteStatusLiveData.observeForever(favoriteStatusObserver)
     }
 

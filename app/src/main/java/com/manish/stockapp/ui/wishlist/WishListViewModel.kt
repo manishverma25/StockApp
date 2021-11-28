@@ -1,19 +1,14 @@
 package com.manish.stockapp.ui.wishlist
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.explore.repos.demoapplication.CoroutineContextProvider
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.QuerySnapshot
-import com.manish.stockapp.data.FavoriteStockItem
 import com.manish.stockapp.data.Resource
 import com.manish.stockapp.data.StockDetailsItem
 import com.manish.stockapp.domain.FavoriteRepositoryUseCase
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 

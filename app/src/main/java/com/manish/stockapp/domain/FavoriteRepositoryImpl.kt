@@ -3,18 +3,15 @@ package com.manish.stockapp.domain
 import android.util.Log
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.manish.stockapp.data.StockDetailsItem
 import com.manish.stockapp.util.Constants.FIREBASE_COLLECTION_PATH
 import com.manish.stockapp.util.Constants.FIREBASE_DOCUMENT_NAME
 import java.lang.Exception
 //import com.manish.stockapp.util.Constants.FIREBASE_DOCUMENT_PATH
 import javax.inject.Inject
-import com.manish.stockapp.data.FavoriteStockItem
+import com.manish.stockapp.data.FavoriteStockDetails
 import com.manish.stockapp.data.Resource
-import com.manish.stockapp.ui.wishlist.WishListViewModelState
 
 
 class FavoriteRepositoryImpl  @Inject constructor (): FavoriteRepositoryUseCase {
@@ -32,7 +29,7 @@ class FavoriteRepositoryImpl  @Inject constructor (): FavoriteRepositoryUseCase 
 
     override fun doFavorite(stockDetailItem: StockDetailsItem): Resource<String> {
         Log.d(TAG, "doFavorite  stock ::  $stockDetailItem")
-        val favoriteItem = FavoriteStockItem(stockDetailItem.sid, true)
+        val favoriteItem = FavoriteStockDetails(stockDetailItem.sid, true)
         val documentReference = fireStoreCollection.document(user!!.email.toString())
             .collection(FIREBASE_DOCUMENT_NAME).document(favoriteItem.sid)
         try {
@@ -65,7 +62,7 @@ class FavoriteRepositoryImpl  @Inject constructor (): FavoriteRepositoryUseCase 
             if(!querySnapshot?.documents.isNullOrEmpty() ){
 
                 for (doc in querySnapshot?.documents!!.iterator()) {
-                        var favoriteStockItem = doc.toObject(FavoriteStockItem::class.java)
+                        var favoriteStockItem = doc.toObject(FavoriteStockDetails::class.java)
                         Log.w(TAG, "stockDetailsItem  :::: :  $favoriteStockItem")
                         if (favoriteStockItem?.isfavorite == true) {
                             savedAddressList.add(StockDetailsItem(favoriteStockItem.sid))
@@ -77,6 +74,9 @@ class FavoriteRepositoryImpl  @Inject constructor (): FavoriteRepositoryUseCase 
         }
         return favoriteResponse
     }
+
+
+
 
     companion object {
         val TAG = "FavoriteRepositoryImpl"

@@ -134,7 +134,7 @@ class HomeFragment : Fragment(), StockDetailsAdapter.OnStockItemSelectListener {
 
     private fun observerFavoriteStatusLiveData() {
 
-        viewModel.favoriteStatusLiveData.observe(requireActivity(), Observer { response ->
+        viewModel.favoriteStatusLiveData.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
@@ -157,7 +157,7 @@ class HomeFragment : Fragment(), StockDetailsAdapter.OnStockItemSelectListener {
     }
 
     private fun observerStockDetailLiveData(){
-        viewModel.stocksDetailApiStatusLiveData.observe(requireActivity(), Observer { response ->
+        viewModel.stocksDetailApiStatusLiveData.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is Resource.Success -> {
                     hideProgressBar()
@@ -183,7 +183,7 @@ class HomeFragment : Fragment(), StockDetailsAdapter.OnStockItemSelectListener {
     }
 
     private fun observeStockDetailsApiHitLiveData(){
-        viewModel.stockDetailsApiHitLiveData.observe(requireActivity(), Observer { isApiHit ->
+        viewModel.stockDetailsApiHitLiveData.observe(viewLifecycleOwner, Observer { isApiHit ->
             Log.d(TAG, " observeStockDetailsApiHitLiveData ... $isApiHit   . ")
             if(isApiHit){
                 Toast.makeText(requireContext(),getString(R.string.stocks_live_tracking_api_hit),Toast.LENGTH_SHORT).show()

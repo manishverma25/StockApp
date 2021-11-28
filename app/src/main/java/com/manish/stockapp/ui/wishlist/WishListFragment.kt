@@ -33,6 +33,7 @@ class WishListFragment : Fragment() {
 
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,16 +46,30 @@ class WishListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         injectDI()
-        init();
+        setUpUI();
+
+        /***
+         *
+         * called it from onviewCreated as it get called when this fragment changed
+         *
+         *  If it would have called from init {} block of viewmodel ,it won't called in that case
+         *  but to get updated watchlist data every time  on slecting  wishlist fragment, it called from onViewCreated
+         *
+         */
+        getFavoriteStockList()
     }
 
-    private fun init() {
+    private fun setUpUI() {
         wishListRecyclerView.setHasFixedSize(true)
         wishListRecyclerView.layoutManager = LinearLayoutManager(activity)
         wishListStockAdapter = WishListStockAdapter()
 
         observerLiveData()
-        getFavoriteStockList()
+
+    }
+
+    init {
+
 
     }
 
@@ -75,7 +90,7 @@ class WishListFragment : Fragment() {
     private fun observerWishListViewModelStateLiveData() {
 
         wishListViewModel.wishListViewModelStateLiveData.observe(
-            requireActivity(),
+            viewLifecycleOwner,
             wishListViewModelStateObserver)
 
     }
@@ -111,7 +126,7 @@ class WishListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         Log.d(TAG," onDestroyView")
-        wishListViewModel.wishListViewModelStateLiveData.removeObserver(wishListViewModelStateObserver)
+//        wishListViewModel.wishListViewModelStateLiveData.removeObserver(wishListViewModelStateObserver)
 
     }
 
