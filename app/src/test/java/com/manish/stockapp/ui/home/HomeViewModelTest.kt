@@ -7,8 +7,8 @@ import com.manish.stockapp.TestCoroutineRule
 import com.manish.stockapp.data.Resource
 import com.manish.stockapp.data.StockDetailsApiResponse
 import com.manish.stockapp.data.StockDetailsItem
-import com.manish.stockapp.domain.DataRepositoryUseCase
-import com.manish.stockapp.domain.FavoriteRepositoryUseCase
+import com.manish.stockapp.domain.NetworkRepositoryDataSource
+import com.manish.stockapp.domain.FavoriteRepositoryDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.CoreMatchers
 import org.junit.Before
@@ -42,8 +42,8 @@ class HomeViewModelTest{
     @Mock
     lateinit var favoriteStatusObserver: Observer<Resource<String>>
 
-    @Mock lateinit var networkDataRepositoryUseCaseImpl: DataRepositoryUseCase
-    @Mock lateinit var favoriteRepositoryImpl: FavoriteRepositoryUseCase
+    @Mock lateinit var networkNetworkRepositoryDataSourceImpl: NetworkRepositoryDataSource
+    @Mock lateinit var favoriteRepositoryImpl: FavoriteRepositoryDataSource
 
     val apiErrorMsg =  "Internal server error 500"
 
@@ -67,8 +67,8 @@ class HomeViewModelTest{
 //        appContext
 //        val f = FirebaseFirestore.getInstance()
 //        Log.d("mvv","FirebaseFirestore  .... "+appContext)
-        homeViewModel = HomeViewModel(networkDataRepositoryUseCaseImpl,favoriteRepositoryImpl, TestCoroutineContextProvider())
-        homeViewModel.stocksDetailApiStatusLiveData1.observeForever(stateObserver)
+        homeViewModel = HomeViewModel(networkNetworkRepositoryDataSourceImpl,favoriteRepositoryImpl, TestCoroutineContextProvider())
+        homeViewModel.stocksDetailApiStatusLiveData.observeForever(stateObserver)
         homeViewModel.favoriteStatusLiveData.observeForever(favoriteStatusObserver)
     }
 
@@ -84,7 +84,7 @@ class HomeViewModelTest{
 
         val mockedStockDetailsResponse  = StockDetailsApiResponse(true,  arrayListOf(  mockedStockDetailsItem ))
         testCoroutineRule.runBlockingTest {
-            Mockito.`when`(networkDataRepositoryUseCaseImpl.getStocksDetails()).thenReturn(
+            Mockito.`when`(networkNetworkRepositoryDataSourceImpl.getStocksDetails()).thenReturn(
                 Resource.Success(mockedStockDetailsResponse)
             )
             homeViewModel.fetchStockDetailsData()
@@ -104,7 +104,7 @@ class HomeViewModelTest{
 
 
         testCoroutineRule.runBlockingTest {
-            Mockito.`when`(networkDataRepositoryUseCaseImpl.getStocksDetails()).thenReturn(
+            Mockito.`when`(networkNetworkRepositoryDataSourceImpl.getStocksDetails()).thenReturn(
                 Resource.Error(apiErrorMsg)
             )
             homeViewModel.fetchStockDetailsData()

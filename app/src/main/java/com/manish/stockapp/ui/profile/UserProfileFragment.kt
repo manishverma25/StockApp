@@ -9,9 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.firebase.ui.auth.AuthUI
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import com.manish.stockapp.R
 import com.manish.stockapp.StockApplication
 import com.manish.stockapp.ViewModelFactory
@@ -22,7 +20,7 @@ import kotlinx.android.synthetic.main.profile_fragment.*
 import javax.inject.Inject
 
 
-class ProfileFragment : Fragment() {
+class UserProfileFragment : Fragment() {
 
 
     @Inject
@@ -125,8 +123,8 @@ class ProfileFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance( ): ProfileFragment {
-            return ProfileFragment()
+        fun newInstance( ): UserProfileFragment {
+            return UserProfileFragment()
         }
 
         private val ARG_PARAM1 = "param1"

@@ -6,15 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.explore.repos.demoapplication.CoroutineContextProvider
 import com.manish.stockapp.data.*
-import com.manish.stockapp.domain.DataRepositoryUseCase
-import com.manish.stockapp.domain.FavoriteRepositoryUseCase
+import com.manish.stockapp.domain.NetworkRepositoryDataSource
+import com.manish.stockapp.domain.FavoriteRepositoryDataSource
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 class HomeViewModel @Inject constructor(
-    val networkDataRepositoryUseCaseImpl: DataRepositoryUseCase,
-    val favoriteRepositoryImpl: FavoriteRepositoryUseCase,
+    val networkNetworkRepositoryDataSourceImpl: NetworkRepositoryDataSource,
+    val favoriteRepositoryImpl: FavoriteRepositoryDataSource,
     val coroutineContextProvider: CoroutineContextProvider
 ) : ViewModel() {
 
@@ -41,7 +41,7 @@ class HomeViewModel @Inject constructor(
     fun fetchStockDetailsData() = viewModelScope.launch(ioContext) {
         _stockDetailsApiHitLiveData.postValue(true)
         _stocksDetailApiStatusLiveData.postValue(Resource.Loading())
-        val response = networkDataRepositoryUseCaseImpl.getStocksDetails()
+        val response = networkNetworkRepositoryDataSourceImpl.getStocksDetails()
         _stocksDetailApiStatusLiveData.postValue(response)
     }
 

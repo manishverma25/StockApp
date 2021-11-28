@@ -7,14 +7,14 @@ import androidx.lifecycle.viewModelScope
 import com.explore.repos.demoapplication.CoroutineContextProvider
 import com.manish.stockapp.data.Resource
 import com.manish.stockapp.data.StockDetailsItem
-import com.manish.stockapp.domain.FavoriteRepositoryUseCase
+import com.manish.stockapp.domain.FavoriteRepositoryDataSource
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 
 class WishListViewModel @Inject constructor (
-    val favoriteRepositoryImpl: FavoriteRepositoryUseCase,
+    val favoriteRepositoryImpl: FavoriteRepositoryDataSource,
     val coroutineContextProvider: CoroutineContextProvider
 ) :
     ViewModel() {

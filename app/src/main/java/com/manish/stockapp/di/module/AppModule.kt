@@ -16,10 +16,10 @@ abstract class AppModule {
     abstract fun bindcontext(context: Application): Context
 
     @Binds
-    abstract fun bindsFavoriteRepositoryUseCase(favoriteRepositoryImpl: FavoriteRepositoryImpl): FavoriteRepositoryUseCase
+    abstract fun bindsFavoriteRepositoryUseCase(favoriteRepository: FavoriteRepository): FavoriteRepositoryDataSource
 
     @Binds
-    abstract fun bindsDataRepositoryUseCase(networkDataRepositoryImpl: NetworkDataRepositoryImpl): DataRepositoryUseCase
+    abstract fun bindsDataRepositoryUseCase(networkDataRepositoryImpl: NetworkNetworkRepositoryImpl): NetworkRepositoryDataSource
 
     @Binds
     abstract fun bindsUserRepository(networkDataRepositoryImpl: UserProfileProfileRepository): UserProfileRepositoryDataSource

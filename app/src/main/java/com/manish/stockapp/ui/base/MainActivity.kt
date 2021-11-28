@@ -12,7 +12,7 @@ import com.manish.stockapp.StockApplication
 import com.manish.stockapp.ui.home.HomeFragment
 import com.manish.stockapp.ui.login.LoginActivity
 import com.manish.stockapp.ui.wishlist.WishListFragment
-import com.manish.stockapp.ui.profile.ProfileFragment
+import com.manish.stockapp.ui.profile.UserProfileFragment
 import kotlinx.android.synthetic.main.main_activity.*
 
 
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
             when (it) {
                 0 -> openFragment(HomeFragment.newInstance())
                 1 -> openFragment(WishListFragment.newInstance())
-                2 -> openFragment(ProfileFragment.newInstance())
+                2 -> openFragment(UserProfileFragment.newInstance())
             }
         }
         if (FirebaseAuth.getInstance().currentUser == null) {

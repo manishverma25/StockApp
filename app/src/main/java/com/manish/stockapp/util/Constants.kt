@@ -8,4 +8,10 @@ object Constants{
     const val FIREBASE_DOCUMENT_NAME ="favorite_stocks_details"
 
     const val  KEY_FIELD_FOR_FAVORITE =  "favorite"
+
+    const val  API_FAILURE =  "Api Failure"
+
+    const val  NO_INTERNET_AVAILABLE =  "No internet available"
+
+
 }

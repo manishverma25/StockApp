@@ -6,7 +6,6 @@ import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import com.manish.stockapp.R
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +15,7 @@ import com.manish.stockapp.StockApplication
 import com.manish.stockapp.ViewModelFactory
 import com.manish.stockapp.data.Resource
 import com.manish.stockapp.data.StockDetailsItem
+import com.manish.stockapp.ui.base.BaseFragment
 import com.manish.stockapp.util.Constants
 import com.manish.stockapp.util.extension.errorSnack
 import com.manish.stockapp.util.extension.showSnack
@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.home_fragment.*
 import javax.inject.Inject
 
 
-class HomeFragment : Fragment(), StockDetailsAdapter.OnStockItemSelectListener {
+class HomeFragment : BaseFragment(), StockDetailsAdapter.OnStockItemSelectListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -137,12 +137,12 @@ class HomeFragment : Fragment(), StockDetailsAdapter.OnStockItemSelectListener {
         viewModel.favoriteStatusLiveData.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is Resource.Success -> {
-                    hideProgressBar()
+                    hideProgressBar(progress)
                     Log.d(TAG, " favoriteStatusLiveData Success  ")
                     progress. showSnack(getString(R.string.stock_favorite_success_msg),Snackbar.LENGTH_LONG)
                 }
                 is Resource.Error -> {
-                    hideProgressBar()
+                    hideProgressBar(progress)
                     response.message?.let { message ->
                         Log.d(TAG, " favoriteStatusLiveData message $message")
                         progress.errorSnack(getString(R.string.stock_favorite_error_msg), Snackbar.LENGTH_LONG)
@@ -150,7 +150,7 @@ class HomeFragment : Fragment(), StockDetailsAdapter.OnStockItemSelectListener {
                 }
 
                 is Resource.Loading -> {
-                    showProgressBar()
+                    showProgressBar(progress)
                 }
             }
         })
@@ -160,7 +160,7 @@ class HomeFragment : Fragment(), StockDetailsAdapter.OnStockItemSelectListener {
         viewModel.stocksDetailApiStatusLiveData.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is Resource.Success -> {
-                    hideProgressBar()
+                    hideProgressBar(progress)
                     response.data?.let { stockDetailsResponse ->
                         Log.d(TAG, " stockDetailsResponsessage data  :  ${stockDetailsResponse.data}")
                         stockDetailsListAdapter?.differ?.submitList(stockDetailsResponse.data)
@@ -168,7 +168,7 @@ class HomeFragment : Fragment(), StockDetailsAdapter.OnStockItemSelectListener {
                     }
                 }
                 is Resource.Error -> {
-                    hideProgressBar()
+                    hideProgressBar(progress)
                     response.message?.let { message ->
                         Log.d(TAG, " message $message")
                         progress.errorSnack(message, Snackbar.LENGTH_LONG)
@@ -176,7 +176,7 @@ class HomeFragment : Fragment(), StockDetailsAdapter.OnStockItemSelectListener {
                 }
 
                 is Resource.Loading -> {
-                    showProgressBar()
+                    showProgressBar(progress)
                 }
             }
         })
@@ -192,13 +192,7 @@ class HomeFragment : Fragment(), StockDetailsAdapter.OnStockItemSelectListener {
     }
 
 
-    private fun hideProgressBar() {
-        progress.visibility = View.GONE
-    }
 
-    private fun showProgressBar() {
-        progress.visibility = View.VISIBLE
-    }
 
 
     override fun onDestroy() {

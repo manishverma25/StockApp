@@ -14,7 +14,7 @@ import com.manish.stockapp.data.FavoriteStockDetails
 import com.manish.stockapp.data.Resource
 
 
-class FavoriteRepositoryImpl  @Inject constructor (): FavoriteRepositoryUseCase {
+class FavoriteRepository  @Inject constructor (): FavoriteRepositoryDataSource {
 
     var user = FirebaseAuth.getInstance().currentUser
 

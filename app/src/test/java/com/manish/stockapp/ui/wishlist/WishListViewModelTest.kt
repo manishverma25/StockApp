@@ -2,15 +2,11 @@ package com.manish.stockapp.ui.wishlist
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.QuerySnapshot
 import com.manish.stockapp.TestCoroutineContextProvider
 import com.manish.stockapp.TestCoroutineRule
 import com.manish.stockapp.data.Resource
 import com.manish.stockapp.data.StockDetailsItem
-import com.manish.stockapp.domain.FavoriteRepositoryUseCase
+import com.manish.stockapp.domain.FavoriteRepositoryDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.CoreMatchers
 import org.junit.Before
@@ -38,7 +34,7 @@ class WishListViewModelTest{
     @Mock
     lateinit var WishListViewModelStateObserver: Observer<WishListViewModelState>
 
-    @Mock lateinit var favoriteRepositoryImpl: FavoriteRepositoryUseCase
+    @Mock lateinit var favoriteRepositoryImpl: FavoriteRepositoryDataSource
 
     val mockedStockDetailsItem = StockDetailsItem(
         sid = "RELI",

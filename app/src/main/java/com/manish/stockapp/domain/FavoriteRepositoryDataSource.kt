@@ -5,7 +5,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.manish.stockapp.data.Resource
 import com.manish.stockapp.data.StockDetailsItem
 
-interface FavoriteRepositoryUseCase { //rename it forebase rep[sositiry
+interface FavoriteRepositoryDataSource { //rename it forebase rep[sositiry
     fun doFavorite(stockDetailItem: StockDetailsItem) : Resource<String>
 
     fun getFavoriteStocksCollection(): Resource<List<StockDetailsItem>>?

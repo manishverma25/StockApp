@@ -2,16 +2,15 @@ package com.manish.stockapp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.manish.stockapp.domain.FavoriteRepositoryImpl
-import com.manish.stockapp.domain.NetworkDataRepositoryImpl
-import com.manish.stockapp.ui.home.HomeViewModel
+import com.manish.stockapp.domain.FavoriteRepository
+import com.manish.stockapp.domain.NetworkNetworkRepositoryImpl
 
 
 // not needed  this class
 class ViewModelProviderFactory(
     val app: StockApplication,
-    val networkDataRepositoryImpl: NetworkDataRepositoryImpl,
-    val favoriteRepositoryImpl: FavoriteRepositoryImpl
+    val networkDataRepositoryImpl: NetworkNetworkRepositoryImpl,
+    val favoriteRepository: FavoriteRepository
 ) : ViewModelProvider.Factory {
 
 
