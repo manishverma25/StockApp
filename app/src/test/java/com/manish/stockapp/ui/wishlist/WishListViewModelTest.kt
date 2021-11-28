@@ -6,7 +6,7 @@ import com.manish.stockapp.TestCoroutineContextProvider
 import com.manish.stockapp.TestCoroutineRule
 import com.manish.stockapp.data.Resource
 import com.manish.stockapp.data.StockDetailsItem
-import com.manish.stockapp.domain.FavoriteRepositoryDataSource
+import com.manish.stockapp.data.repository.FavoriteRepositoryDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.CoreMatchers
 import org.junit.Before

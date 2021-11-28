@@ -1,15 +1,11 @@
 package com.manish.stockapp.ui.profile
 
-import org.junit.Assert.*
-
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.manish.stockapp.TestCoroutineContextProvider
 import com.manish.stockapp.TestCoroutineRule
 import com.manish.stockapp.data.Resource
-import com.manish.stockapp.data.StockDetailsItem
-import com.manish.stockapp.domain.UserProfileRepositoryDataSource
-import com.manish.stockapp.util.Constants
+import com.manish.stockapp.data.repository.UserProfileRepositoryDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.CoreMatchers
 import org.junit.Before

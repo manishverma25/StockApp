@@ -55,6 +55,15 @@ class WishListFragment : Fragment() {
         getFavoriteStockList()
     }
 
+    private fun getFavoriteStockList() {
+        wishListViewModel.fetchFavoriteStocksList()
+
+    }
+
+    private fun observerLiveData() {
+        wishListViewModel.wishListStocksListLiveData.observe(viewLifecycleOwner, ::handleWishListStocksListResponse)
+    }
+
     private fun setUpUI() {
         wishListRecyclerView.setHasFixedSize(true)
         wishListRecyclerView.layoutManager = LinearLayoutManager(activity)
@@ -69,19 +78,6 @@ class WishListFragment : Fragment() {
     }
 
 
-    private fun getFavoriteStockList() {
-        wishListViewModel.fetchFavoriteStocksList()
-
-    }
-
-    private fun observerLiveData() {
-        observerWishListViewModelStateLiveData()
-    }
-
-    private fun observerWishListViewModelStateLiveData() {
-        wishListViewModel.wishListStocksListLiveData.observe(viewLifecycleOwner, ::handleWishListStocksListResponse)
-
-    }
 
     private fun handleWishListStocksListResponse(wishListStocksListResponse: WishListViewModelState?) {
         Log.d(TAG, " wishListViewModelState  ... $wishListStocksListResponse ")

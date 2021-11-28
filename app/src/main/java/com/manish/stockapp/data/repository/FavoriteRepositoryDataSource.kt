@@ -1,7 +1,5 @@
-package com.manish.stockapp.domain
+package com.manish.stockapp.data.repository
 
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.CollectionReference
 import com.manish.stockapp.data.Resource
 import com.manish.stockapp.data.StockDetailsItem
 

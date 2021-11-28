@@ -2,8 +2,8 @@ package com.manish.stockapp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.manish.stockapp.domain.FavoriteRepository
-import com.manish.stockapp.domain.NetworkRepository
+import com.manish.stockapp.data.repository.FavoriteRepository
+import com.manish.stockapp.data.repository.NetworkRepository
 
 
 // not needed  this class

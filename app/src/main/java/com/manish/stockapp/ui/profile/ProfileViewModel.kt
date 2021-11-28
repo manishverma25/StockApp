@@ -3,7 +3,7 @@ package com.manish.stockapp.ui.profile
 import androidx.lifecycle.*
 import com.explore.repos.demoapplication.CoroutineContextProvider
 import com.manish.stockapp.data.Resource
-import com.manish.stockapp.domain.UserProfileRepositoryDataSource
+import com.manish.stockapp.data.repository.UserProfileRepositoryDataSource
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -31,7 +31,8 @@ class ProfileViewModel @Inject constructor (
 
     fun userLoggingOut() {
         viewModelScope.launch(ioContext) {
-            _signOutSuccessStatusLivaData.postValue(userProfileRepository.userLoggingOut())
+            _signOutSuccessStatusLivaData.postValue(userProfileRepository.
+            userLoggingOut())
         }
     }
 

@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.manish.stockapp.R
@@ -59,17 +58,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun observerLiveData() {
-        observeruserNameLiveData()
-        observerUserLogoutLiveData()
-    }
-    private fun observeruserNameLiveData() {
         profileViewModel.userNameLiveData.observe(viewLifecycleOwner, ::handleUserNameResposne)
-    }
-
-    private fun observerUserLogoutLiveData() {
-        profileViewModel.signOutSuccessStatusLivaData.observe(viewLifecycleOwner, Observer {  response->
-            handleUserLogoutResposne(response)
-        })
         profileViewModel.signOutSuccessStatusLivaData.observe(viewLifecycleOwner, ::handleUserLogoutResposne)
     }
 

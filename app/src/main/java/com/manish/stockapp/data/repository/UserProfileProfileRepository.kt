@@ -1,9 +1,10 @@
-package com.manish.stockapp.domain
+package com.manish.stockapp.data.repository
 
 import android.content.Context
 import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
+import com.manish.stockapp.data.Error.FIREBASE_USER_DETAILS_NOT_FOUND
 import com.manish.stockapp.data.Resource
 import javax.inject.Inject
 
@@ -14,7 +15,7 @@ class UserProfileProfileRepository @Inject constructor(val context: Context) :Us
         return if(!userName.isNullOrEmpty()) {
             Resource.Success(userName)
         }else{
-            Resource.Error("userName not found")
+            Resource.Error(FIREBASE_USER_DETAILS_NOT_FOUND)
         }
     }
 
@@ -22,7 +23,7 @@ class UserProfileProfileRepository @Inject constructor(val context: Context) :Us
         val task = AuthUI.getInstance().signOut(context)
         Tasks.await(task)
         return if (task.isSuccessful) {
-            Resource.Success("Successful user log out ")
+            Resource.Success("")
         } else {
             val errorMsg = task.exception?.message?:"Not able to logged out successfully "
             Resource.Error(errorMsg)

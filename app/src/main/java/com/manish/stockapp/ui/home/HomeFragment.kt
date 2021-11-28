@@ -125,24 +125,12 @@ class HomeFragment : BaseFragment(), StockDetailsAdapter.OnStockItemSelectListen
 
 
     private fun observerLiveData() {
-        Log.d(TAG, " called observerLiveData() . ")
-        observerStockDetailLiveData()
-        observeStockDetailsApiTrackingLiveData()
-        observerFavoriteStatusLiveData()
-
-    }
-
-    private fun observerFavoriteStatusLiveData() {
         viewModel.favoriteStatusLiveData.observe(viewLifecycleOwner, ::handleFavoriteResponse)
-    }
-
-    private fun observerStockDetailLiveData(){
-        viewModel.stocksDetailApiStatusLiveData.observe(viewLifecycleOwner, ::handleStockDetailsApi)
-    }
-
-    private fun observeStockDetailsApiTrackingLiveData(){
         viewModel.stockDetailsApiTrackingLiveData.observe(viewLifecycleOwner, ::handleStockDetailsApiTracking)
+        viewModel.stocksDetailApiStatusLiveData.observe(viewLifecycleOwner, ::handleStockDetailsApi)
+
     }
+
 
     private fun handleStockDetailsApiTracking(isApiHit: Boolean) {
         if(isApiHit){

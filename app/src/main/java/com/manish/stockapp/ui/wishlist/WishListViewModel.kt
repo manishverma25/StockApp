@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.explore.repos.demoapplication.CoroutineContextProvider
 import com.manish.stockapp.data.Resource
 import com.manish.stockapp.data.StockDetailsItem
-import com.manish.stockapp.domain.FavoriteRepositoryDataSource
+import com.manish.stockapp.data.repository.FavoriteRepositoryDataSource
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext

@@ -2,7 +2,7 @@ package com.manish.stockapp.di.module
 
 import android.app.Application
 import android.content.Context
-import com.manish.stockapp.domain.*
+import com.manish.stockapp.data.repository.*
 import dagger.Binds
 import dagger.Module
 

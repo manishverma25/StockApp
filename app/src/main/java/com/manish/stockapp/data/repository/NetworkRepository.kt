@@ -1,4 +1,4 @@
-package com.manish.stockapp.domain
+package com.manish.stockapp.data.repository
 
 import android.app.Application
 import android.content.Context
