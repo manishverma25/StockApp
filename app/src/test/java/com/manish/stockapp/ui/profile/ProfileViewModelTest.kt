@@ -47,18 +47,6 @@ class ProfileViewModelTest{
 
     val mockedUseName = "Test"
 
-    val mockedStockDetailsItem = StockDetailsItem(
-        sid = "RELI",
-        price = 2485.25F,
-        close = 12F,
-        change= 133.85F,
-        high =  2496F,
-        low = 2357.15F,
-        volume = 16425378,
-        date = "2021-11-25T08:48:12.000Z"
-
-    )
-    val apiErrorMsg =  "Internal server error 500"
 
     @Before
     fun setUp() {
@@ -68,7 +56,6 @@ class ProfileViewModelTest{
         profileViewModel.signOutSuccessStatusLivaData.observeForever(signOutSuccessStatusObserver)
     }
 
-    // success data from usecase, success state shud be triggered
     @Test
     fun `get user name sccucess`() {
 
@@ -92,7 +79,7 @@ class ProfileViewModelTest{
 
         testCoroutineRule.runBlockingTest {
             Mockito.`when`(userProfileRepository.getUserName()).thenReturn(
-                Resource.Error(apiErrorMsg)
+                Resource.Error("")
             )
             profileViewModel.fetchUserName()
 
@@ -101,7 +88,6 @@ class ProfileViewModelTest{
                 .onChanged(ac.capture() as Resource<String>?  )
 
             Assert.assertThat(ac.allValues[0], CoreMatchers.instanceOf( Resource.Error::class.java))
-            Assert.assertThat(ac.allValues[0].message, CoreMatchers.equalTo(apiErrorMsg))
         }
     }
 

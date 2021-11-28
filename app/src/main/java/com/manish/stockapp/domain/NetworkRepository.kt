@@ -11,7 +11,7 @@ import com.manish.stockapp.util.Constants.NO_INTERNET_AVAILABLE
 import retrofit2.Response
 import javax.inject.Inject
 
-class NetworkNetworkRepositoryImpl  @Inject constructor (val apiService: ApiService, val context: Context): NetworkRepositoryDataSource {
+class NetworkRepository  @Inject constructor (private val apiService: ApiService, val context: Context): NetworkRepositoryDataSource {
      override suspend fun getStocksDetails() : Resource<StockDetailsApiResponse> {
           return if (hasInternetConnection(context as Application)) {
                val response = apiService.getStockDetails()

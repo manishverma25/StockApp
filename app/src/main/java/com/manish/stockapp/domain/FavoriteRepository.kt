@@ -16,7 +16,7 @@ import com.manish.stockapp.data.Resource
 
 class FavoriteRepository  @Inject constructor (): FavoriteRepositoryDataSource {
 
-    var user = FirebaseAuth.getInstance().currentUser
+
 
     private val fireStoreDB = FirebaseFirestore.getInstance()
     private val fireStoreCollection = fireStoreDB.collection(FIREBASE_COLLECTION_PATH)
@@ -24,7 +24,11 @@ class FavoriteRepository  @Inject constructor (): FavoriteRepositoryDataSource {
     override fun doFavorite(stockDetailItem: StockDetailsItem): Resource<String> {
         Log.d(TAG, "doFavorite  stock ::  $stockDetailItem")
         val favoriteItem = FavoriteStockDetails(stockDetailItem.sid, true)
-        val documentReference = fireStoreCollection.document(user!!.email.toString())
+        val email = FirebaseAuth.getInstance().currentUser?.email
+        if(email.isNullOrEmpty()){
+            return  Resource.Error("user details not found ")
+        }
+        val documentReference = fireStoreCollection.document(email.toString())
             .collection(FIREBASE_DOCUMENT_NAME).document(favoriteItem.sid)
         try {
             val resultTask = documentReference.set(favoriteItem)
@@ -32,7 +36,7 @@ class FavoriteRepository  @Inject constructor (): FavoriteRepositoryDataSource {
             return if (resultTask.isSuccessful) {
                 Resource.Success("")
             } else {
-                Resource.Error("")  //todo can send some msg
+                Resource.Error("")
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -42,8 +46,12 @@ class FavoriteRepository  @Inject constructor (): FavoriteRepositoryDataSource {
 
 
     override fun getFavoriteStocksCollection(): Resource<List<StockDetailsItem>>? {
-        var favoriteResponse : Resource<List<StockDetailsItem>>? =   Resource.Error(message = "",null)
-           val collectionReference =  fireStoreDB.collection(FIREBASE_COLLECTION_PATH + "/${user!!.email.toString()}/" + FIREBASE_DOCUMENT_NAME)
+        val favoriteResponse : Resource<List<StockDetailsItem>>? =   Resource.Error(message = "",null)
+        val email = FirebaseAuth.getInstance().currentUser?.email
+        if(email.isNullOrEmpty()){
+            return  Resource.Error("user details not found ")
+        }
+        val collectionReference =  fireStoreDB.collection(FIREBASE_COLLECTION_PATH + "/${email}/" + FIREBASE_DOCUMENT_NAME)
         val task = collectionReference.get()
         Tasks.await(task)
         /***

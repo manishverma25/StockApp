@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.content.Intent
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.firebase.ui.auth.AuthUI
 import com.manish.stockapp.R
 
@@ -20,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth
 
 
 class LoginActivity : AppCompatActivity() {
-    val TAG = "LoginActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
@@ -29,7 +29,6 @@ class LoginActivity : AppCompatActivity() {
 
     fun handleLogin(view: View) {
 
-        Log.d(TAG," handleLogin click ")
         val providers: List<AuthUI.IdpConfig> = Arrays.asList(
             AuthUI.IdpConfig.EmailBuilder().build(),
             AuthUI.IdpConfig.GoogleBuilder().build(),
@@ -38,7 +37,6 @@ class LoginActivity : AppCompatActivity() {
         val intent: Intent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
-//            .setLogo(R.drawable.)
             .setAlwaysShowSignInMethodScreen(true)
             .setIsSmartLockEnabled(false)
             .build()
@@ -49,10 +47,6 @@ class LoginActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == AUTHUI_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                // We have signed in the user or we have a new user
-                val user = FirebaseAuth.getInstance().currentUser
-                Log.d(TAG, "onActivityResult: " + user.toString())
-                //Checking for User (New/Old)
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -60,9 +54,10 @@ class LoginActivity : AppCompatActivity() {
                 // Signing in failed
                 val response = IdpResponse.fromResultIntent(data)
                 if (response == null) {
-                    Log.d(TAG, "onActivityResult: the user has cancelled the sign in request")
+                    Log.d(Companion.TAG, "onActivityResult: the user has cancelled the sign in request")
                 } else {
-                    Log.e(TAG, "onActivityResult: ", response.error)
+                    val errorMsg = response.error?.message?: getString(R.string.sign_in_error)
+                    Toast.makeText(this,errorMsg,Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -70,5 +65,6 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
         val  AUTHUI_REQUEST_CODE = 100
+        val TAG = "LoginActivity"
     }
 }

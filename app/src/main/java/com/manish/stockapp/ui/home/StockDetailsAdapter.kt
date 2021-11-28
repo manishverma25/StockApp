@@ -54,10 +54,6 @@ class StockDetailsAdapter (var onStockItemSelectListener :OnStockItemSelectListe
         holder.itemView.stockItemCheckBox.setOnCheckedChangeListener { _, isChecked ->
             onStockItemSelectListener?.onStockItemSelectListener(stockDetailItem)
         }
-
-
-
-        holder.itemView.setOnClickListener(View.OnClickListener {  })
     }
 
      interface OnStockItemSelectListener {

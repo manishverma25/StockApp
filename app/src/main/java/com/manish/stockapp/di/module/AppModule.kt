@@ -19,7 +19,7 @@ abstract class AppModule {
     abstract fun bindsFavoriteRepositoryUseCase(favoriteRepository: FavoriteRepository): FavoriteRepositoryDataSource
 
     @Binds
-    abstract fun bindsDataRepositoryUseCase(networkDataRepositoryImpl: NetworkNetworkRepositoryImpl): NetworkRepositoryDataSource
+    abstract fun bindsDataRepositoryUseCase(networkDataRepository: NetworkRepository): NetworkRepositoryDataSource
 
     @Binds
     abstract fun bindsUserRepository(networkDataRepositoryImpl: UserProfileProfileRepository): UserProfileRepositoryDataSource

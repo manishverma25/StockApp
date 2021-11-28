@@ -9,12 +9,11 @@ import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 class ProfileViewModel @Inject constructor (
-    val userProfileRepository: UserProfileRepositoryDataSource,
-    val coroutineContextProvider: CoroutineContextProvider
+    private val userProfileRepository: UserProfileRepositoryDataSource,
+    private val coroutineContextProvider: CoroutineContextProvider
 ) :ViewModel() {
 
     val ioContext: CoroutineContext = (coroutineContextProvider.IO)
-
 
 
     private val _userNameLiveData: MutableLiveData<Resource<String>> = MutableLiveData()
@@ -23,10 +22,6 @@ class ProfileViewModel @Inject constructor (
     private val _signOutSuccessStatusLivaData: MutableLiveData<Resource<String>> = MutableLiveData()
     val signOutSuccessStatusLivaData: LiveData<Resource<String>> = _signOutSuccessStatusLivaData
 
-//    init {
-//        fetchUserName()
-//
-//    }
 
      fun fetchUserName(){
         viewModelScope.launch(ioContext) {

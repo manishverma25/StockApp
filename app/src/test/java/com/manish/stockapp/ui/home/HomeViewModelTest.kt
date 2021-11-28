@@ -64,21 +64,11 @@ class HomeViewModelTest{
     @Before
     fun setUp() {
         MockitoAnnotations.openMocks(this)
-//        appContext
-//        val f = FirebaseFirestore.getInstance()
-//        Log.d("mvv","FirebaseFirestore  .... "+appContext)
         homeViewModel = HomeViewModel(networkNetworkRepositoryDataSourceImpl,favoriteRepositoryImpl, TestCoroutineContextProvider())
         homeViewModel.stocksDetailApiStatusLiveData.observeForever(stateObserver)
         homeViewModel.favoriteStatusLiveData.observeForever(favoriteStatusObserver)
     }
 
-    // error returnded from use case, error state shud be retrurned
-    // empty data returned, error state shud be returned
-
-
-
-
-    // success data from usecase, success state shud be triggered
     @Test
     fun `fetchStockDetails api Data success `() {
 
@@ -145,7 +135,6 @@ class HomeViewModelTest{
     @Test
     fun `do favorite stock get failed ` () {
 
-        val mockedFavoriteResponse  = Resource.Error(  apiErrorMsg,null)
         testCoroutineRule.runBlockingTest {
             Mockito.`when`( favoriteRepositoryImpl.doFavorite(mockedStockDetailsItem)).thenReturn(
                 Resource.Error(  apiErrorMsg,String())

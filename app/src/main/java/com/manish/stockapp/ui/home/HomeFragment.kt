@@ -7,18 +7,20 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import com.manish.stockapp.R
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.manish.stockapp.StockApplication
 import com.manish.stockapp.ViewModelFactory
 import com.manish.stockapp.data.Resource
+import com.manish.stockapp.data.StockDetailsApiResponse
 import com.manish.stockapp.data.StockDetailsItem
 import com.manish.stockapp.ui.base.BaseFragment
 import com.manish.stockapp.util.Constants
 import com.manish.stockapp.util.extension.errorSnack
 import com.manish.stockapp.util.extension.showSnack
+import com.manish.stockapp.util.extension.toGone
+import com.manish.stockapp.util.extension.toVisible
 import kotlinx.android.synthetic.main.home_fragment.*
 import javax.inject.Inject
 
@@ -60,7 +62,6 @@ class HomeFragment : BaseFragment(), StockDetailsAdapter.OnStockItemSelectListen
     }
 
     private fun injectDI() {
-
         StockApplication.appComponent.inject(this)
     }
 
@@ -87,7 +88,6 @@ class HomeFragment : BaseFragment(), StockDetailsAdapter.OnStockItemSelectListen
          */
         stopPerodicApiCall()
     }
-//    val executorService =   Executors.newSingleThreadScheduledExecutor()
 
     fun startPerodicAPiCall(){
         periodicApiPollingRunnableTask?.let {
@@ -125,74 +125,81 @@ class HomeFragment : BaseFragment(), StockDetailsAdapter.OnStockItemSelectListen
 
 
     private fun observerLiveData() {
-        Log.d(TAG, " called observerLiveData() .2222. ")
+        Log.d(TAG, " called observerLiveData() . ")
         observerStockDetailLiveData()
-        observeStockDetailsApiHitLiveData()
+        observeStockDetailsApiTrackingLiveData()
         observerFavoriteStatusLiveData()
 
     }
 
     private fun observerFavoriteStatusLiveData() {
-
-        viewModel.favoriteStatusLiveData.observe(viewLifecycleOwner, Observer { response ->
-            when (response) {
-                is Resource.Success -> {
-                    hideProgressBar(progress)
-                    Log.d(TAG, " favoriteStatusLiveData Success  ")
-                    progress. showSnack(getString(R.string.stock_favorite_success_msg),Snackbar.LENGTH_LONG)
-                }
-                is Resource.Error -> {
-                    hideProgressBar(progress)
-                    response.message?.let { message ->
-                        Log.d(TAG, " favoriteStatusLiveData message $message")
-                        progress.errorSnack(getString(R.string.stock_favorite_error_msg), Snackbar.LENGTH_LONG)
-                    }
-                }
-
-                is Resource.Loading -> {
-                    showProgressBar(progress)
-                }
-            }
-        })
+        viewModel.favoriteStatusLiveData.observe(viewLifecycleOwner, ::handleFavoriteResponse)
     }
 
     private fun observerStockDetailLiveData(){
-        viewModel.stocksDetailApiStatusLiveData.observe(viewLifecycleOwner, Observer { response ->
-            when (response) {
-                is Resource.Success -> {
-                    hideProgressBar(progress)
-                    response.data?.let { stockDetailsResponse ->
-                        Log.d(TAG, " stockDetailsResponsessage data  :  ${stockDetailsResponse.data}")
-                        stockDetailsListAdapter?.differ?.submitList(stockDetailsResponse.data)
-                        stockDeatilsRecyclerView.adapter = stockDetailsListAdapter
-                    }
-                }
-                is Resource.Error -> {
-                    hideProgressBar(progress)
-                    response.message?.let { message ->
-                        Log.d(TAG, " message $message")
-                        progress.errorSnack(message, Snackbar.LENGTH_LONG)
-                    }
-                }
-
-                is Resource.Loading -> {
-                    showProgressBar(progress)
-                }
-            }
-        })
+        viewModel.stocksDetailApiStatusLiveData.observe(viewLifecycleOwner, ::handleStockDetailsApi)
     }
 
-    private fun observeStockDetailsApiHitLiveData(){
-        viewModel.stockDetailsApiHitLiveData.observe(viewLifecycleOwner, Observer { isApiHit ->
-            Log.d(TAG, " observeStockDetailsApiHitLiveData ... $isApiHit   . ")
-            if(isApiHit){
-                Toast.makeText(requireContext(),getString(R.string.stocks_live_tracking_api_hit),Toast.LENGTH_SHORT).show()
+    private fun observeStockDetailsApiTrackingLiveData(){
+        viewModel.stockDetailsApiTrackingLiveData.observe(viewLifecycleOwner, ::handleStockDetailsApiTracking)
+    }
+
+    private fun handleStockDetailsApiTracking(isApiHit: Boolean) {
+        if(isApiHit){
+            Toast.makeText(requireContext(),getString(R.string.stocks_live_tracking_api_hit),Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun handleFavoriteResponse(response: Resource<String>) {
+        when (response) {
+            is Resource.Success -> {
+                progress.toGone()
+                progress.showSnack(
+                    getString(R.string.stock_favorite_success_msg),
+                    Snackbar.LENGTH_LONG
+                )
             }
-        })
+            is Resource.Error -> {
+                progress.toGone()
+                response.message?.let { message ->
+                    progress.errorSnack(
+                        getString(R.string.stock_favorite_error_msg),
+                        Snackbar.LENGTH_LONG
+                    )
+                }
+            }
+
+            is Resource.Loading -> {
+                progress.toVisible()
+            }
+        }
     }
 
 
 
+    private fun handleStockDetailsApi(response :Resource<StockDetailsApiResponse>){
+        when (response) {
+            is Resource.Success -> {
+                progress.toGone()
+                response.data?.let { stockDetailsResponse ->
+                    Log.d(TAG, " stockDetailsResponsessage data  :  ${stockDetailsResponse.data}")
+                    stockDetailsListAdapter?.differ?.submitList(stockDetailsResponse.data)
+                    stockDeatilsRecyclerView.adapter = stockDetailsListAdapter
+                }
+            }
+            is Resource.Error -> {
+                progress.toGone()
+                response.message?.let { message ->
+                    Log.d(TAG, " message $message")
+                    progress.errorSnack(message, Snackbar.LENGTH_LONG)
+                }
+            }
+
+            is Resource.Loading -> {
+                progress.toVisible()
+            }
+        }
+    }
 
 
     override fun onDestroy() {
@@ -202,9 +209,6 @@ class HomeFragment : BaseFragment(), StockDetailsAdapter.OnStockItemSelectListen
         stockDetailsListAdapter = null
     }
 
-
-
-
     companion object {
         fun newInstance(): HomeFragment {
             return   HomeFragment()
@@ -212,7 +216,6 @@ class HomeFragment : BaseFragment(), StockDetailsAdapter.OnStockItemSelectListen
         val TAG = "HomeFragment"
     }
 
-
-
-
 }
+
+

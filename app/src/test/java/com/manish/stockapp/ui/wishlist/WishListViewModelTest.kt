@@ -1,6 +1,5 @@
 package com.manish.stockapp.ui.wishlist
 
-import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.manish.stockapp.TestCoroutineContextProvider
@@ -54,12 +53,11 @@ class WishListViewModelTest{
     fun setUp() {
         MockitoAnnotations.openMocks(this)
         wishListViewModel = WishListViewModel(favoriteRepositoryImpl, TestCoroutineContextProvider())
-        wishListViewModel.wishListViewModelStateLiveData.observeForever(WishListViewModelStateObserver)
+        wishListViewModel.wishListStocksListLiveData.observeForever(WishListViewModelStateObserver)
     }
 
-    // success data from usecase, success state shud be triggered
     @Test
-    fun getData_successFromFetchFavoriteStocks_loadingAndSuccessReturned() {
+    fun  `get favorite stock list success`() {
 
         val mockedFavvoriteStockList  =  arrayListOf(  mockedStockDetailsItem )
         testCoroutineRule.runBlockingTest {
@@ -79,14 +77,13 @@ class WishListViewModelTest{
 
 
     @Test
-    fun getData_api_errorFromUseCase_loadingAndSuccessReturned() {
+    fun `get favorite stock list error`() {
 
-        val mockedWishListFavorResponse = WishListViewModelState.Error("")
         testCoroutineRule.runBlockingTest {
             Mockito.`when`(favoriteRepositoryImpl.getFavoriteStocksCollection()).thenReturn(
                 Resource.Error(apiErrorMsg)
             )
-            wishListViewModel.fetchFavoriteStocksList()  // or homeViewModel.fetchStocksDetails
+            wishListViewModel.fetchFavoriteStocksList()
 
             val ac = ArgumentCaptor.forClass(Resource::class.java)
             Mockito.verify(WishListViewModelStateObserver, Mockito.times(2))

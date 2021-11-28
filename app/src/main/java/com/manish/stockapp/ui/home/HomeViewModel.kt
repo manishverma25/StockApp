@@ -13,9 +13,9 @@ import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 class HomeViewModel @Inject constructor(
-    val networkNetworkRepositoryDataSourceImpl: NetworkRepositoryDataSource,
-    val favoriteRepositoryImpl: FavoriteRepositoryDataSource,
-    val coroutineContextProvider: CoroutineContextProvider
+    private val networkNetworkRepositoryDataSourceImpl: NetworkRepositoryDataSource,
+    private val favoriteRepositoryImpl: FavoriteRepositoryDataSource,
+    private val coroutineContextProvider: CoroutineContextProvider
 ) : ViewModel() {
 
 
@@ -27,8 +27,8 @@ class HomeViewModel @Inject constructor(
 
     private val ioContext: CoroutineContext = (coroutineContextProvider.IO)
 
-    private val _stockDetailsApiHitLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
-    val stockDetailsApiHitLiveData: LiveData<Boolean> = _stockDetailsApiHitLiveData
+    private val _stockDetailsApiTrackingLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
+    val stockDetailsApiTrackingLiveData: LiveData<Boolean> = _stockDetailsApiTrackingLiveData
 
     private val _favoriteStatusLiveData: MutableLiveData<Resource<String>> = MutableLiveData()
 
@@ -39,7 +39,7 @@ class HomeViewModel @Inject constructor(
 
 
     fun fetchStockDetailsData() = viewModelScope.launch(ioContext) {
-        _stockDetailsApiHitLiveData.postValue(true)
+        _stockDetailsApiTrackingLiveData.postValue(true)
         _stocksDetailApiStatusLiveData.postValue(Resource.Loading())
         val response = networkNetworkRepositoryDataSourceImpl.getStocksDetails()
         _stocksDetailApiStatusLiveData.postValue(response)

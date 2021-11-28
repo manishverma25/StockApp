@@ -53,8 +53,6 @@ class UserProfileFragment : Fragment() {
 
     private fun initUI() {
         signOutTxt.setOnClickListener {
-//            AuthUI.getInstance().signOut(ProfileFragment@this.requireContext())
-//            startLoginActivity()
             profileViewModel.userLoggingOut()
         }
 
@@ -65,15 +63,14 @@ class UserProfileFragment : Fragment() {
         observerUserLogoutLiveData()
     }
     private fun observeruserNameLiveData() {
-        profileViewModel.userNameLiveData.observe(viewLifecycleOwner, Observer {  response->
-            handleUserNameResposne(response)
-        })
+        profileViewModel.userNameLiveData.observe(viewLifecycleOwner, ::handleUserNameResposne)
     }
 
     private fun observerUserLogoutLiveData() {
         profileViewModel.signOutSuccessStatusLivaData.observe(viewLifecycleOwner, Observer {  response->
             handleUserLogoutResposne(response)
         })
+        profileViewModel.signOutSuccessStatusLivaData.observe(viewLifecycleOwner, ::handleUserLogoutResposne)
     }
 
     private fun handleUserNameResposne(response :Resource<String>){
@@ -109,14 +106,6 @@ class UserProfileFragment : Fragment() {
     }
 
 
-    private fun showProgressBar() {
-        progress.visibility = View.VISIBLE
-    }
-
-    private fun hideProgressBar() {
-        progress.visibility = View.GONE
-    }
-
     private fun startLoginActivity() {
         val intent = Intent(activity, LoginActivity::class.java)
         startActivity(intent)
@@ -128,8 +117,6 @@ class UserProfileFragment : Fragment() {
             return UserProfileFragment()
         }
 
-        private val ARG_PARAM1 = "param1"
-        private val ARG_PARAM2 = "param2"
         val TAG = "ProfileFragment"
     }
 

@@ -14,8 +14,8 @@ import kotlin.coroutines.CoroutineContext
 
 
 class WishListViewModel @Inject constructor (
-    val favoriteRepositoryImpl: FavoriteRepositoryDataSource,
-    val coroutineContextProvider: CoroutineContextProvider
+    private val favoriteRepositoryImpl: FavoriteRepositoryDataSource,
+     coroutineContextProvider: CoroutineContextProvider
 ) :
     ViewModel() {
 
@@ -23,19 +23,19 @@ class WishListViewModel @Inject constructor (
     val ioContext: CoroutineContext = (coroutineContextProvider.IO)
 
 
-    private val _wishListViewModelStateLiveData: MutableLiveData<WishListViewModelState> = MutableLiveData()
+    private val _wishListStocksListLiveData: MutableLiveData<WishListViewModelState> = MutableLiveData()
 
-    val wishListViewModelStateLiveData: LiveData<WishListViewModelState>
+    val wishListStocksListLiveData: LiveData<WishListViewModelState>
         get() {
-            return _wishListViewModelStateLiveData
+            return _wishListStocksListLiveData
         }
 
-    fun fetchFavoriteStocksList() { //LiveData<List<StockDetailsItem>>
+    fun fetchFavoriteStocksList() {
 
         viewModelScope.launch(ioContext) {
-            _wishListViewModelStateLiveData.postValue(WishListViewModelState.Loading)
+            _wishListStocksListLiveData.postValue(WishListViewModelState.Loading)
             val favoriteListResponse = favoriteRepositoryImpl.getFavoriteStocksCollection()
-            _wishListViewModelStateLiveData.postValue(transformToState(favoriteListResponse))
+            _wishListStocksListLiveData.postValue(transformToState(favoriteListResponse))
         }
     }
 

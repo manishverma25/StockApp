@@ -1,6 +1,6 @@
 package com.manish.stockapp.di.module
 
-import android.app.Application
+
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -9,7 +9,7 @@ import androidx.viewbinding.BuildConfig
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.manish.stockapp.api.ApiService
 import com.manish.stockapp.util.Constants.BASE_URL
-import okhttp3.Cache
+
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -19,12 +19,7 @@ import java.util.concurrent.TimeUnit
 @Module
 class NetworkModule {
 
-//    @Singleton
-//    @Provides
-//    fun provideCache(application: Application): Cache {
-//        val cacheSize = 10 * 1024 * 1024L
-//        return Cache(application.cacheDir, cacheSize)
-//    }
+
 
     @Singleton
     @Provides
@@ -39,7 +34,6 @@ class NetworkModule {
             .addInterceptor(logging)
             .readTimeout(60, TimeUnit.SECONDS)
             .connectTimeout(60, TimeUnit.SECONDS)
-//        builder.cache(cache)
         return builder.build()
     }
 
@@ -57,4 +51,17 @@ class NetworkModule {
     @Provides
     @Singleton
     fun postService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
+
+
+
+
+
+
+
+    //    @Singleton
+//    @Provides
+//    fun provideCache(application: Application): Cache {
+//        val cacheSize = 10 * 1024 * 1024L
+//        return Cache(application.cacheDir, cacheSize)
+//    }
 }
