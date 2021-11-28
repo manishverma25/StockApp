@@ -1,5 +1,6 @@
 package com.manish.stockapp.ui.wishlist
 
+import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.manish.stockapp.TestCoroutineContextProvider
@@ -60,10 +61,10 @@ class WishListViewModelTest{
     @Test
     fun getData_successFromFetchFavoriteStocks_loadingAndSuccessReturned() {
 
-        val mockedWishListFavorResponse  =  arrayListOf(  mockedStockDetailsItem )
+        val mockedFavvoriteStockList  =  arrayListOf(  mockedStockDetailsItem )
         testCoroutineRule.runBlockingTest {
             Mockito.`when`(favoriteRepositoryImpl.getFavoriteStocksCollection()).thenReturn(
-                Resource.Success(mockedWishListFavorResponse)
+                Resource.Success(mockedFavvoriteStockList)
             )
             wishListViewModel.fetchFavoriteStocksList()
 
@@ -73,7 +74,6 @@ class WishListViewModelTest{
 
             Assert.assertThat(ac.allValues[0], CoreMatchers.instanceOf( WishListViewModelState.Loading::class.java))
             Assert.assertThat(ac.allValues[1], CoreMatchers.instanceOf( WishListViewModelState.Success::class.java))
-            Assert.assertThat(ac.allValues[1].data, CoreMatchers.equalTo(mockedWishListFavorResponse))
         }
     }
 
@@ -96,11 +96,6 @@ class WishListViewModelTest{
                 ac.allValues[0],
                 CoreMatchers.instanceOf(WishListViewModelState.Loading::class.java)
             )
-            Assert.assertThat(
-                ac.allValues[1].data,
-                CoreMatchers.equalTo(mockedWishListFavorResponse)
-            )
-
             Assert.assertThat(ac.allValues[1], CoreMatchers.instanceOf(WishListViewModelState.Error::class.java))
         }
     }

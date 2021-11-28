@@ -2,7 +2,6 @@ package com.manish.stockapp.ui.profile
 
 import androidx.lifecycle.*
 import com.explore.repos.demoapplication.CoroutineContextProvider
-import com.manish.stockapp.StockApplication
 import com.manish.stockapp.data.Resource
 import com.manish.stockapp.domain.UserProfileRepositoryDataSource
 import kotlinx.coroutines.launch
@@ -24,12 +23,12 @@ class ProfileViewModel @Inject constructor (
     private val _signOutSuccessStatusLivaData: MutableLiveData<Resource<String>> = MutableLiveData()
     val signOutSuccessStatusLivaData: LiveData<Resource<String>> = _signOutSuccessStatusLivaData
 
-    init {
-        setUserName()
+//    init {
+//        fetchUserName()
+//
+//    }
 
-    }
-
-    private fun setUserName(){
+     fun fetchUserName(){
         viewModelScope.launch(ioContext) {
             _userNameLiveData.postValue(userProfileRepository.getUserName())
         }
@@ -37,7 +36,6 @@ class ProfileViewModel @Inject constructor (
 
     fun userLoggingOut() {
         viewModelScope.launch(ioContext) {
-//            _signOutSuccessStatusLivaData.postValue(userRepository.userLoggingOut(StockApplication.appContext))
             _signOutSuccessStatusLivaData.postValue(userProfileRepository.userLoggingOut())
         }
     }

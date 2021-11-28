@@ -43,6 +43,7 @@ class UserProfileFragment : Fragment() {
         injectDI()
         initUI()
         observerLiveData()
+        profileViewModel.fetchUserName()
     }
 
 

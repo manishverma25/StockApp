@@ -33,6 +33,7 @@ class WishListViewModel @Inject constructor (
     fun fetchFavoriteStocksList() { //LiveData<List<StockDetailsItem>>
 
         viewModelScope.launch(ioContext) {
+            _wishListViewModelStateLiveData.postValue(WishListViewModelState.Loading)
             val favoriteListResponse = favoriteRepositoryImpl.getFavoriteStocksCollection()
             _wishListViewModelStateLiveData.postValue(transformToState(favoriteListResponse))
         }

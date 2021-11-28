@@ -21,12 +21,6 @@ class FavoriteRepository  @Inject constructor (): FavoriteRepositoryDataSource {
     private val fireStoreDB = FirebaseFirestore.getInstance()
     private val fireStoreCollection = fireStoreDB.collection(FIREBASE_COLLECTION_PATH)
 
-
-    /***
-     *
-     *
-     */
-
     override fun doFavorite(stockDetailItem: StockDetailsItem): Resource<String> {
         Log.d(TAG, "doFavorite  stock ::  $stockDetailItem")
         val favoriteItem = FavoriteStockDetails(stockDetailItem.sid, true)
@@ -62,7 +56,7 @@ class FavoriteRepository  @Inject constructor (): FavoriteRepositoryDataSource {
             if(!querySnapshot?.documents.isNullOrEmpty() ){
 
                 for (doc in querySnapshot?.documents!!.iterator()) {
-                        var favoriteStockItem = doc.toObject(FavoriteStockDetails::class.java)
+                        val favoriteStockItem = doc.toObject(FavoriteStockDetails::class.java)
                         Log.w(TAG, "stockDetailsItem  :::: :  $favoriteStockItem")
                         if (favoriteStockItem?.isfavorite == true) {
                             savedAddressList.add(StockDetailsItem(favoriteStockItem.sid))
