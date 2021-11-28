@@ -1,9 +1,8 @@
 package com.manish.stockapp.di.module
 
-import com.manish.stockapp.domain.DataRepositoryUseCase
-import com.manish.stockapp.domain.FavoriteRepositoryImpl
-import com.manish.stockapp.domain.FavoriteRepositoryUseCase
-import com.manish.stockapp.domain.NetworkDataRepositoryImpl
+import android.app.Application
+import android.content.Context
+import com.manish.stockapp.domain.*
 import dagger.Binds
 import dagger.Module
 
@@ -12,11 +11,17 @@ import dagger.Module
 abstract class AppModule {
 
 
+
+    @Binds
+    abstract fun bindcontext(context: Application): Context
+
     @Binds
     abstract fun bindsFavoriteRepositoryUseCase(favoriteRepositoryImpl: FavoriteRepositoryImpl): FavoriteRepositoryUseCase
 
     @Binds
     abstract fun bindsDataRepositoryUseCase(networkDataRepositoryImpl: NetworkDataRepositoryImpl): DataRepositoryUseCase
 
+    @Binds
+    abstract fun bindsUserRepository(networkDataRepositoryImpl: UserProfileProfileRepository): UserProfileRepositoryDataSource
 
 }

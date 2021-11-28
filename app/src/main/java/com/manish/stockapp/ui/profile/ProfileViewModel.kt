@@ -1,17 +1,16 @@
 package com.manish.stockapp.ui.profile
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.explore.repos.demoapplication.CoroutineContextProvider
-import com.google.firebase.auth.FirebaseAuth
+import com.manish.stockapp.StockApplication
 import com.manish.stockapp.data.Resource
+import com.manish.stockapp.domain.UserProfileRepositoryDataSource
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 class ProfileViewModel @Inject constructor (
+    val userProfileRepository: UserProfileRepositoryDataSource,
     val coroutineContextProvider: CoroutineContextProvider
 ) :ViewModel() {
 
@@ -22,8 +21,8 @@ class ProfileViewModel @Inject constructor (
     private val _userNameLiveData: MutableLiveData<Resource<String>> = MutableLiveData()
     val userNameLiveData: LiveData<Resource<String>> = _userNameLiveData
 
-
-
+    private val _signOutSuccessStatusLivaData: MutableLiveData<Resource<String>> = MutableLiveData()
+    val signOutSuccessStatusLivaData: LiveData<Resource<String>> = _signOutSuccessStatusLivaData
 
     init {
         setUserName()
@@ -32,10 +31,15 @@ class ProfileViewModel @Inject constructor (
 
     private fun setUserName(){
         viewModelScope.launch(ioContext) {
-            val userName =  FirebaseAuth.getInstance().currentUser?.displayName
-            _userNameLiveData.postValue(Resource.Success (userName?:""))
+            _userNameLiveData.postValue(userProfileRepository.getUserName())
         }
     }
 
+    fun userLoggingOut() {
+        viewModelScope.launch(ioContext) {
+//            _signOutSuccessStatusLivaData.postValue(userRepository.userLoggingOut(StockApplication.appContext))
+            _signOutSuccessStatusLivaData.postValue(userProfileRepository.userLoggingOut())
+        }
+    }
 
 }

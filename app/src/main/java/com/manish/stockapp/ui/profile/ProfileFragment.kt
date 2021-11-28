@@ -54,29 +54,59 @@ class ProfileFragment : Fragment() {
 
     private fun initUI() {
         signOutTxt.setOnClickListener {
-            AuthUI.getInstance().signOut(ProfileFragment@this.requireContext())
-            startLoginActivity()
+//            AuthUI.getInstance().signOut(ProfileFragment@this.requireContext())
+//            startLoginActivity()
+            profileViewModel.userLoggingOut()
         }
 
     }
 
     private fun observerLiveData() {
+        observeruserNameLiveData()
+        observerUserLogoutLiveData()
+    }
+    private fun observeruserNameLiveData() {
         profileViewModel.userNameLiveData.observe(viewLifecycleOwner, Observer {  response->
-            when (response) {
-                is Resource.Success -> {
-                    userNameTxt.text = response.data
-                }
-                is Resource.Error -> {
-                    response.message?.let { message ->
-                        Log.d(TAG, " message $message")
-                        userNameTxt.errorSnack(message, Snackbar.LENGTH_LONG)
-                    }
-                }
-                is Resource.Loading -> {
+            handleUserNameResposne(response)
+        })
+    }
+
+    private fun observerUserLogoutLiveData() {
+        profileViewModel.signOutSuccessStatusLivaData.observe(viewLifecycleOwner, Observer {  response->
+            handleUserLogoutResposne(response)
+        })
+    }
+
+    private fun handleUserNameResposne(response :Resource<String>){
+        when (response) {
+            is Resource.Success -> {
+                userNameTxt.text = response.data
+            }
+            is Resource.Error -> {
+                response.message?.let { message ->
+                    Log.d(TAG, " message $message")
+                    userNameTxt.errorSnack(message, Snackbar.LENGTH_LONG)
                 }
             }
+            is Resource.Loading -> {
+            }
+        }
+    }
 
-        })
+    private fun handleUserLogoutResposne(response :Resource<String>){
+        when (response) {
+            is Resource.Success -> {
+                startLoginActivity()
+            }
+            is Resource.Error -> {
+                response.message?.let { message ->
+                    Log.d(TAG, " message $message")
+                    userNameTxt.errorSnack(message, Snackbar.LENGTH_LONG)
+                }
+            }
+            is Resource.Loading -> {
+            }
+        }
     }
 
 
