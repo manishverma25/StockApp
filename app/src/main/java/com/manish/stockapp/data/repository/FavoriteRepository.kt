@@ -3,6 +3,7 @@ package com.manish.stockapp.data.repository
 import android.util.Log
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.manish.stockapp.data.Error.FIREBASE_USER_DETAILS_NOT_FOUND
 import com.manish.stockapp.data.StockDetailsItem
@@ -15,12 +16,8 @@ import com.manish.stockapp.data.FavoriteStockDetails
 import com.manish.stockapp.data.Resource
 
 
-class FavoriteRepository  @Inject constructor (): FavoriteRepositoryDataSource {
+class FavoriteRepository  @Inject constructor (val fireStoreDB: FirebaseFirestore,val fireStoreCollection: CollectionReference): FavoriteRepositoryDataSource {
 
-
-
-    private val fireStoreDB = FirebaseFirestore.getInstance()
-    private val fireStoreCollection = fireStoreDB.collection(FIREBASE_COLLECTION_PATH)
 
     override fun doFavorite(stockDetailItem: StockDetailsItem): Resource<String> {
         Log.d(TAG, "doFavorite  stock ::  $stockDetailItem")
@@ -82,7 +79,7 @@ class FavoriteRepository  @Inject constructor (): FavoriteRepositoryDataSource {
 
 
     companion object {
-        val TAG = "FavoriteRepositoryImpl"
+        val TAG = "FavoriteRepository"
     }
 
 

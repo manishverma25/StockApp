@@ -6,6 +6,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.manish.stockapp.R
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +16,6 @@ import com.manish.stockapp.ViewModelFactory
 import com.manish.stockapp.data.Resource
 import com.manish.stockapp.data.StockDetailsApiResponse
 import com.manish.stockapp.data.StockDetailsItem
-import com.manish.stockapp.ui.base.BaseFragment
 import com.manish.stockapp.util.Constants
 import com.manish.stockapp.util.extension.errorSnack
 import com.manish.stockapp.util.extension.showSnack
@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.home_fragment.*
 import javax.inject.Inject
 
 
-class HomeFragment : BaseFragment(), StockDetailsAdapter.OnStockItemSelectListener {
+class HomeFragment : Fragment(), StockDetailsAdapter.OnStockItemSelectListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
