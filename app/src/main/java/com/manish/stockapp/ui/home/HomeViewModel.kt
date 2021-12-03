@@ -1,5 +1,6 @@
 package com.manish.stockapp.ui.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,7 +9,9 @@ import com.explore.repos.demoapplication.CoroutineContextProvider
 import com.manish.stockapp.data.*
 import com.manish.stockapp.data.repository.NetworkRepositoryDataSource
 import com.manish.stockapp.data.repository.FavoriteRepositoryDataSource
-import kotlinx.coroutines.launch
+import com.manish.stockapp.util.Constants
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -45,6 +48,38 @@ class HomeViewModel @Inject constructor(
         _stocksDetailApiStatusLiveData.postValue(response)
     }
 
+    //Flow
+    fun fetchStockDetailsDataUsingFlow() = viewModelScope.launch(ioContext) {
+        val latestNews: Flow<List<Resource<StockDetailsApiResponse>>>
+
+
+
+    }
+
+    lateinit var  periodicStockDetailsJob :Job
+
+    fun startPeriodicJobForFetchingStocksDetails(){
+               periodicStockDetailsJob = viewModelScope.launch(ioContext) {
+                try {
+                    println("launched  job")
+                    fetchStockDetailsData();
+                    delay(Constants.STOCK_DEATILS_API_PERIODIC_TIMER)
+                    ensureActive()
+                    if(isActive ){
+                        repeat(1, {startPeriodicJobForFetchingStocksDetails()})
+                    }
+
+                } catch (e: CancellationException) {
+                    println("cancel job  $isActive")
+                }
+            }
+    }
+
+    fun  stopPeriodicJobForFetchingStocksDetails(){
+
+        Log.d(TAG,"stopPeriodicStcokDetailsApiCall ...  ")
+        periodicStockDetailsJob.cancel()
+    }
 
 
     fun doFavorite(stockDetailsItem: StockDetailsItem) {

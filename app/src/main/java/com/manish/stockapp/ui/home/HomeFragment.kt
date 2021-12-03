@@ -35,14 +35,7 @@ class HomeFragment : Fragment(), StockDetailsAdapter.OnStockItemSelectListener {
     }
 
 
-    val periodicApiPollingHandler = Handler(Looper.getMainLooper())
 
-    var periodicApiPollingRunnableTask :Runnable? = object: Runnable {
-        override fun run() {
-            viewModel.fetchStockDetailsData()
-            periodicApiPollingHandler.postDelayed(this, Constants.STOCK_DEATILS_API_PERIODIC_TIMER)
-        }
-    }
 
 
      var stockDetailsListAdapter: StockDetailsAdapter? = null
@@ -77,31 +70,41 @@ class HomeFragment : Fragment(), StockDetailsAdapter.OnStockItemSelectListener {
         /**
          * Start the api call periodically
          */
-       startPerodicAPiCall()  //stop perodic call having bug
+
+        viewModel. startPeriodicJobForFetchingStocksDetails()
     }
 
     override fun onStop() {
         super.onStop()
 
+
         /**
          * Stop  the api call periodically
          */
-        stopPerodicApiCall()
+        viewModel. stopPeriodicJobForFetchingStocksDetails()
     }
 
-    fun startPerodicAPiCall(){
-        periodicApiPollingRunnableTask?.let {
-            periodicApiPollingHandler.post(it)
-        }
-    }
+    // previous Handler approach for pervious
+//    fun startPerodicAPiCall(){
+//        periodicApiPollingRunnableTask?.let {
+//            periodicApiPollingHandler.post(it)
+//        }
+//    }
 
-
-    fun stopPerodicApiCall(){
-        periodicApiPollingRunnableTask?.let {
-            periodicApiPollingHandler.removeCallbacks(it)
-        }
-
-    }
+//    val periodicApiPollingHandler = Handler(Looper.getMainLooper())
+//
+//    var periodicApiPollingRunnableTask :Runnable? = object: Runnable {
+//        override fun run() {
+//            viewModel.fetchStockDetailsData()
+//            periodicApiPollingHandler.postDelayed(this, Constants.STOCK_DEATILS_API_PERIODIC_TIMER)
+//        }
+//    }
+//
+//    fun stopPerodicApiCall(){
+//        periodicApiPollingRunnableTask?.let {
+//            periodicApiPollingHandler.removeCallbacks(it)
+//        }
+//    }
 
 
 
@@ -192,9 +195,10 @@ class HomeFragment : Fragment(), StockDetailsAdapter.OnStockItemSelectListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        periodicApiPollingRunnableTask = null
+//        periodicApiPollingRunnableTask = null
         stockDetailsListAdapter?.onStockItemSelectListener = null
         stockDetailsListAdapter = null
+        viewModel.stopPeriodicJobForFetchingStocksDetails()
     }
 
     companion object {
