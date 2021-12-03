@@ -13,9 +13,6 @@
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true" />
-        <activity
-            android:name=".TestActivity"
-            android:exported="true" />
         <activity android:name=".ui.base.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
