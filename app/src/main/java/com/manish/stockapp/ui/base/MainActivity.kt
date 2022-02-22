@@ -47,6 +47,10 @@ class MainActivity : AppCompatActivity(), FirebaseAuth.AuthStateListener {
 
     }
 
+    fun checkOrg(){
+        // checkOrg
+    }
+
     fun openFragment(fragment: Fragment) {
         val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, fragment)
